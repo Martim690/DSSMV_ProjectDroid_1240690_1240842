@@ -25,13 +25,14 @@ import pt.isep.dssmv.mrgym.R;
 import pt.isep.dssmv.mrgym.adapters.CustomAdapter;
 import pt.isep.dssmv.mrgym.models.Exercise;
 import pt.isep.dssmv.mrgym.network.RestClient;
+import pt.isep.dssmv.mrgym.utils.SharedPrefsUtils;
 
 public class MainActivity extends AppCompatActivity {
 
     private ListView listViewExercises;
     private CustomAdapter adapter;
     private List<Exercise> exerciseList;
-    private Button btnCamera, btnWorkout;
+    private Button btnCamera, btnWorkout, btnLogout;
     private LocationManager locationManager;
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         listViewExercises = findViewById(R.id.listViewExercises);
         btnCamera = findViewById(R.id.btnCamera);
         btnWorkout = findViewById(R.id.btnWorkout);
+        btnLogout = findViewById(R.id.btnLogout);
         
         exerciseList = new ArrayList<>();
         adapter = new CustomAdapter(this, exerciseList);
@@ -61,6 +63,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, WorkoutActivity.class));
+            }
+        });
+
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPrefsUtils.clearSession(MainActivity.this);
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                finish();
             }
         });
 
