@@ -1,4 +1,4 @@
-package pt.isep.dssmv.mrgym.adapters;
+package mrgym.views;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,8 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import java.util.List;
-import pt.isep.dssmv.mrgym.models.Exercise;
-import pt.isep.dssmv.mrgym.R;
+import mrgym.models.Exercise;
+import mrgym.R;
 
 public class CustomAdapter extends BaseAdapter {
     private Context context;

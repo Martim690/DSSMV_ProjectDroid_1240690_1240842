@@ -1,4 +1,4 @@
-package pt.isep.dssmv.mrgym.controllers;
+package mrgym.controllers;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,9 +7,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import pt.isep.dssmv.mrgym.R;
-import pt.isep.dssmv.mrgym.utils.SharedPrefsUtils;
-import pt.isep.dssmv.mrgym.network.RestClient;
+import mrgym.R;
+import mrgym.controllers.SharedPrefsUtils;
+import mrgym.controllers.RestClient;
 import com.google.gson.JsonObject;
 
 public class LoginActivity extends AppCompatActivity {
@@ -61,12 +61,16 @@ public class LoginActivity extends AppCompatActivity {
         RestClient.makeRequest(url, "GET", null, apiKey, new RestClient.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
-                if (result.length() > 2) { 
-                    SharedPrefsUtils.saveSession(LoginActivity.this, email, "dummy_token");
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    finish();
-                } else {
-                    Toast.makeText(LoginActivity.this, "Credenciais inv\u00e1lidas", Toast.LENGTH_SHORT).show();
+                try {
+                    if (result.length() > 2) { 
+                        SharedPrefsUtils.saveSession(LoginActivity.this, email, "dummy_token");
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        finish();
+                    } else {
+                        throw new mrgym.exceptions.InvalidCredentialsException("Credenciais inválidas ou conta não existe.");
+                    }
+                } catch (mrgym.exceptions.InvalidCredentialsException e) {
+                    Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
 

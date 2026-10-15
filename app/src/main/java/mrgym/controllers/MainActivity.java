@@ -1,4 +1,4 @@
-package pt.isep.dssmv.mrgym.controllers;
+package mrgym.controllers;
 
 import android.Manifest;
 import android.content.Context;
@@ -21,11 +21,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
-import pt.isep.dssmv.mrgym.R;
-import pt.isep.dssmv.mrgym.adapters.CustomAdapter;
-import pt.isep.dssmv.mrgym.models.Exercise;
-import pt.isep.dssmv.mrgym.network.RestClient;
-import pt.isep.dssmv.mrgym.utils.SharedPrefsUtils;
+import mrgym.R;
+import mrgym.views.CustomAdapter;
+import mrgym.models.Exercise;
+import mrgym.controllers.RestClient;
+import mrgym.controllers.SharedPrefsUtils;
 
 public class MainActivity extends AppCompatActivity {
 

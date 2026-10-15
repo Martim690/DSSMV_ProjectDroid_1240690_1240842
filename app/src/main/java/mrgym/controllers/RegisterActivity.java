@@ -1,4 +1,4 @@
-package pt.isep.dssmv.mrgym.controllers;
+package mrgym.controllers;
 
 import android.os.Bundle;
 import android.view.View;
@@ -6,8 +6,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import pt.isep.dssmv.mrgym.R;
-import pt.isep.dssmv.mrgym.network.RestClient;
+import mrgym.R;
+import mrgym.controllers.RestClient;
 import com.google.gson.JsonObject;
 
 public class RegisterActivity extends AppCompatActivity {

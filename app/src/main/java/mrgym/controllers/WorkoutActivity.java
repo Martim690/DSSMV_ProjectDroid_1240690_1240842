@@ -1,8 +1,8 @@
-package pt.isep.dssmv.mrgym.controllers;
+package mrgym.controllers;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
-import pt.isep.dssmv.mrgym.R;
+import mrgym.R;
 
 public class WorkoutActivity extends AppCompatActivity {
     @Override

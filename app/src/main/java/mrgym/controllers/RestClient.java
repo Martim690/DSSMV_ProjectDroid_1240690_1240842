@@ -1,4 +1,4 @@
-package pt.isep.dssmv.mrgym.network;
+package mrgym.controllers;
 
 import android.os.AsyncTask;
 import java.io.BufferedReader;

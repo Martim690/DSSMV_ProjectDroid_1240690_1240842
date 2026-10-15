@@ -1,4 +1,4 @@
-package pt.isep.dssmv.mrgym.utils;
+package mrgym.controllers;
 
 import android.content.Context;
 import android.content.SharedPreferences;

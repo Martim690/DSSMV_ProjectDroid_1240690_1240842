@@ -1,0 +1,41 @@
+# Domain Model — MRGym
+
+The Domain Model represents the conceptual business entities and relationships of the MRGym mobile application.
+
+```mermaid
+classDiagram
+    direction LR
+
+    class User {
+        email
+        password
+        name
+    }
+
+    class WorkoutPlan {
+        name
+    }
+
+    class Exercise {
+        id
+        name
+        description
+    }
+
+    class WorkoutLog {
+        date
+        durationMinutes
+    }
+
+    User "1" --> "0..*" WorkoutPlan : creates
+    User "1" --> "0..*" WorkoutLog : logs
+    WorkoutPlan "1" --> "1..*" Exercise : contains
+    WorkoutLog "0..*" --> "1" WorkoutPlan : references
+```
+
+## Entity Descriptions
+
+- **User**: Represents a gym user account registered in the system with credentials and profile information.
+- **WorkoutPlan**: Represents a training routine composed of one or more exercises.
+- **Exercise**: Represents an exercise movement with an identifier, name, and description.
+- **WorkoutLog**: Represents a completed workout session with timestamp and elapsed duration.
