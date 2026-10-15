@@ -32,8 +32,8 @@ public class RegisterActivity extends AppCompatActivity {
                 String email = etEmail.getText().toString();
                 String password = etPassword.getText().toString();
 
-                if(name.isEmpty() || email.isEmpty() || password.isEmpty()){
-                    Toast.makeText(RegisterActivity.this, "Preenche todos os campos!", Toast.LENGTH_SHORT).show();
+                if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(RegisterActivity.this, "Please fill in all fields!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -62,13 +62,13 @@ public class RegisterActivity extends AppCompatActivity {
         RestClient.makeRequest(url, "POST", json.toString(), apiKey, new RestClient.VolleyCallback() {
             @Override
             public void onSuccess(String result) {
-                Toast.makeText(RegisterActivity.this, "Conta criada com sucesso!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterActivity.this, "Account created successfully!", Toast.LENGTH_SHORT).show();
                 finish();
             }
 
             @Override
             public void onError(String error) {
-                Toast.makeText(RegisterActivity.this, "Erro de rede: " + error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterActivity.this, "Network error: " + error, Toast.LENGTH_SHORT).show();
             }
         });
     }

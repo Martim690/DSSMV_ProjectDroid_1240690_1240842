@@ -14,12 +14,12 @@
         android:src="@drawable/logo"
         android:scaleType="fitCenter"
         android:layout_marginBottom="32dp"
-        android:contentDescription="MRGYM Logo" />
+        android:contentDescription="@string/logo_description" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Create Account"
+        android:text="@string/label_create_account"
         android:textSize="24sp"
         android:textColor="@color/primary_dark_green"
         android:textStyle="bold"
@@ -30,7 +30,7 @@
         android:id="@+id/etName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Name"
+        android:hint="@string/hint_name"
         android:inputType="textPersonName"
         android:minHeight="48dp"
         android:backgroundTint="@color/primary_green"
@@ -40,7 +40,7 @@
         android:id="@+id/etEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Email"
+        android:hint="@string/hint_email"
         android:inputType="textEmailAddress"
         android:minHeight="48dp"
         android:backgroundTint="@color/primary_green"
@@ -50,7 +50,7 @@
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Password"
+        android:hint="@string/hint_password"
         android:inputType="textPassword"
         android:minHeight="48dp"
         android:backgroundTint="@color/primary_green"
@@ -60,7 +60,7 @@
         android:id="@+id/btnRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Register"
+        android:text="@string/btn_register"
         android:backgroundTint="@color/primary_green"
         android:textColor="@color/white"
         android:layout_marginBottom="16dp" />
@@ -69,7 +69,7 @@
         android:id="@+id/btnGoToLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Back to Login"
+        android:text="@string/btn_back_to_login"
         android:backgroundTint="@color/primary_dark_green"
         android:textColor="@color/white" />
 

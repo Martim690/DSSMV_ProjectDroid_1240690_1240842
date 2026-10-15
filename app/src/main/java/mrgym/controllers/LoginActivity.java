@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import mrgym.R;
 import mrgym.controllers.SharedPrefsUtils;
 import mrgym.controllers.RestClient;
-import com.google.gson.JsonObject;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText etEmail, etPassword;
@@ -38,8 +37,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String email = etEmail.getText().toString();
                 String password = etPassword.getText().toString();
-                if(email.isEmpty() || password.isEmpty()){
-                    Toast.makeText(LoginActivity.this, "Preenche todos os campos!", Toast.LENGTH_SHORT).show();
+                if (email.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(LoginActivity.this, "Please fill in all fields!", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 loginUser(email, password);
@@ -67,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                         finish();
                     } else {
-                        throw new mrgym.exceptions.InvalidCredentialsException("Credenciais inválidas ou conta não existe.");
+                        throw new mrgym.exceptions.InvalidCredentialsException("Invalid credentials or account does not exist.");
                     }
                 } catch (mrgym.exceptions.InvalidCredentialsException e) {
                     Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -76,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onError(String error) {
-                Toast.makeText(LoginActivity.this, "Erro de rede: " + error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "Network error: " + error, Toast.LENGTH_SHORT).show();
             }
         });
     }

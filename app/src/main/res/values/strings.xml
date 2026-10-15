@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">MRGym</string>
+
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_name">Name</string>
+    <string name="btn_login">Login</string>
+    <string name="btn_create_account">Create Account</string>
+    <string name="btn_register">Register</string>
+    <string name="btn_back_to_login">Back to Login</string>
+    <string name="btn_back">Back</string>
+    <string name="btn_logout">Logout</string>
+    <string name="btn_camera">Camera</string>
+    <string name="btn_workouts">Workouts</string>
+    <string name="btn_profile">Profile</string>
+    <string name="btn_add_workout">Add Workout</string>
+    <string name="label_create_account">Create Account</string>
+    <string name="label_exercises">Exercises</string>
+    <string name="label_workout_management">Workout Management</string>
+    <string name="label_my_workouts">My Workouts</string>
+    <string name="label_profile">Profile</string>
+    <string name="label_logged_as">Logged in as:</string>
+    <string name="logo_description">MRGym Logo</string>
+    <string name="msg_empty_workouts">No workouts saved yet.</string>
 </resources>

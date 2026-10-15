@@ -1,174 +1,163 @@
-# Class Diagram — MRGym
+@startuml
+skinparam classAttributeIconSize 0
 
-The Class Diagram documents the software structure, class members, and relationships organized according to the Model-View-Controller (MVC) architectural pattern.
-
-```mermaid
-classDiagram
-    direction TB
-
-    namespace models {
-        class User {
-            -String _id
-            -String email
-            -String password
-            -String name
-            +User()
-            +User(String, String, String)
-            +getId() String
-            +setId(String) void
-            +getEmail() String
-            +setEmail(String) void
-            +getPassword() String
-            +setPassword(String) void
-            +getName() String
-            +setName(String) void
-            +toString() String
-        }
-
-        class Exercise {
-            -int id
-            -String name
-            -String description
-            +Exercise()
-            +Exercise(int, String, String)
-            +getId() int
-            +setId(int) void
-            +getName() String
-            +setName(String) void
-            +getDescription() String
-            +setDescription(String) void
-            +toString() String
-        }
-
-        class WorkoutPlan {
-            -String _id
-            -String name
-            -List~Exercise~ exercises
-            +WorkoutPlan()
-            +WorkoutPlan(String, List~Exercise~)
-            +getId() String
-            +setId(String) void
-            +getName() String
-            +setName(String) void
-            +getExercises() List~Exercise~
-            +setExercises(List~Exercise~) void
-            +toString() String
-        }
-
-        class WorkoutLog {
-            -String _id
-            -String userId
-            -String date
-            -int durationMinutes
-            +WorkoutLog()
-            +WorkoutLog(String, String, int)
-            +getId() String
-            +setId(String) void
-            +getUserId() String
-            +setUserId(String) void
-            +getDate() String
-            +setDate(String) void
-            +getDurationMinutes() int
-            +setDurationMinutes(int) void
-            +toString() String
-        }
+package "mrgym.models" {
+    class User {
+        - String _id
+        - String email
+        - String password
+        - String name
+        + User()
+        + User(String email, String password, String name)
+        + getId(): String
+        + setId(String _id): void
+        + getEmail(): String
+        + setEmail(String email): void
+        + getPassword(): String
+        + setPassword(String password): void
+        + getName(): String
+        + setName(String name): void
+        + toString(): String
     }
 
-    namespace views {
-        class CustomAdapter {
-            -Context context
-            -List~Exercise~ exerciseList
-            +CustomAdapter(Context, List~Exercise~)
-            +getCount() int
-            +getItem(int) Object
-            +getItemId(int) long
-            +getView(int, View, ViewGroup) View
-        }
+    class Exercise {
+        - int id
+        - String name
+        - String description
+        + Exercise()
+        + Exercise(int id, String name, String description)
+        + getId(): int
+        + setId(int id): void
+        + getName(): String
+        + setName(String name): void
+        + getDescription(): String
+        + setDescription(String description): void
+        + toString(): String
     }
 
-    namespace exceptions {
-        class InvalidCredentialsException {
-            +InvalidCredentialsException(String)
-        }
+    class WorkoutPlan {
+        - String _id
+        - String name
+        - List<Exercise> exercises
+        + WorkoutPlan()
+        + WorkoutPlan(String name, List<Exercise> exercises)
+        + getId(): String
+        + setId(String _id): void
+        + getName(): String
+        + setName(String name): void
+        + getExercises(): List<Exercise>
+        + setExercises(List<Exercise> exercises): void
+        + toString(): String
     }
 
-    namespace controllers {
-        class LoginActivity {
-            -EditText etEmail
-            -EditText etPassword
-            -Button btnLogin
-            -Button btnGoToRegister
-            #onCreate(Bundle) void
-            -loginUser(String, String) void
-        }
+    class WorkoutLog {
+        - String _id
+        - String userId
+        - String date
+        - int durationMinutes
+        + WorkoutLog()
+        + WorkoutLog(String userId, String date, int durationMinutes)
+        + getId(): String
+        + setId(String _id): void
+        + getUserId(): String
+        + setUserId(String userId): void
+        + getDate(): String
+        + setDate(String date): void
+        + getDurationMinutes(): int
+        + setDurationMinutes(int durationMinutes): void
+        + toString(): String
+    }
+}
 
-        class RegisterActivity {
-            -EditText etName
-            -EditText etEmail
-            -EditText etPassword
-            -Button btnRegister
-            -Button btnGoToLogin
-            #onCreate(Bundle) void
-            -registerUser(String, String, String) void
-        }
+package "mrgym.views" {
+    class CustomAdapter {
+        - Context context
+        - List<Exercise> exerciseList
+        + CustomAdapter(Context context, List<Exercise> exerciseList)
+        + getCount(): int
+        + getItem(int position): Object
+        + getItemId(int position): long
+        + getView(int position, View convertView, ViewGroup parent): View
+    }
+}
 
-        class MainActivity {
-            -Toolbar toolbar
-            -ListView listViewExercises
-            -CustomAdapter adapter
-            -List~Exercise~ exerciseList
-            -Button btnCamera
-            -Button btnWorkout
-            -Button btnProfile
-            #onCreate(Bundle) void
-            +onCreateOptionsMenu(Menu) boolean
-            +onOptionsItemSelected(MenuItem) boolean
-        }
+package "mrgym.exceptions" {
+    class InvalidCredentialsException {
+        + InvalidCredentialsException(String message)
+    }
+}
 
-        class WorkoutActivity {
-            -Toolbar toolbar
-            -ListView listViewWorkouts
-            -TextView tvEmptyWorkouts
-            -Button btnAddWorkout
-            #onCreate(Bundle) void
-            +onSupportNavigateUp() boolean
-        }
-
-        class ProfileActivity {
-            -TextView tvUserEmail
-            -Button btnLogoutProfile
-            -Button btnBackProfile
-            #onCreate(Bundle) void
-        }
-
-        class SharedPrefsUtils {
-            -String PREF_NAME$
-            -String KEY_EMAIL$
-            -String KEY_TOKEN$
-            +saveSession(Context, String, String)$ void
-            +getEmail(Context)$ String
-            +clearSession(Context)$ void
-        }
-
-        class RestClient {
-            +makeRequest(String, String, String, String, VolleyCallback)$ void
-        }
+package "mrgym.controllers" {
+    class LoginActivity {
+        - EditText etEmail
+        - EditText etPassword
+        - Button btnLogin
+        - Button btnGoToRegister
+        # onCreate(Bundle savedInstanceState): void
+        - loginUser(String email, String password): void
     }
 
-    WorkoutPlan "1" o-- "*" Exercise : contains
-    MainActivity --> CustomAdapter : uses
-    CustomAdapter --> Exercise : displays
-    LoginActivity ..> SharedPrefsUtils : reads/writes
-    ProfileActivity ..> SharedPrefsUtils : reads/clears
-    MainActivity ..> SharedPrefsUtils : clears
-    LoginActivity ..> RestClient : invokes
-    RegisterActivity ..> RestClient : invokes
-    LoginActivity ..> InvalidCredentialsException : throws
-```
+    class RegisterActivity {
+        - EditText etName
+        - EditText etEmail
+        - EditText etPassword
+        - Button btnRegister
+        - Button btnGoToLogin
+        # onCreate(Bundle savedInstanceState): void
+        - registerUser(String name, String email, String password): void
+    }
 
-## Architectural Overview
+    class MainActivity {
+        - Toolbar toolbar
+        - ListView listViewExercises
+        - CustomAdapter adapter
+        - List<Exercise> exerciseList
+        - Button btnCamera
+        - Button btnWorkout
+        - Button btnProfile
+        # onCreate(Bundle savedInstanceState): void
+        + onCreateOptionsMenu(Menu menu): boolean
+        + onOptionsItemSelected(MenuItem item): boolean
+    }
 
-- **Models**: Plain Java domain classes (`User`, `Exercise`, `WorkoutPlan`, `WorkoutLog`) encapsulating business state and serialization without UI dependencies.
-- **Views**: UI presentations using XML layouts and `CustomAdapter` (extending `BaseAdapter`) to render list rows.
-- **Controllers**: Android Activities (`LoginActivity`, `RegisterActivity`, `MainActivity`, `WorkoutActivity`, `ProfileActivity`) coordinating UI interactions, plus service helpers (`RestClient` and `SharedPrefsUtils`).
-- **Exceptions**: Custom business exception handling (`InvalidCredentialsException`) for authentication failures.
+    class WorkoutActivity {
+        - Toolbar toolbar
+        - ListView listViewWorkouts
+        - TextView tvEmptyWorkouts
+        - Button btnAddWorkout
+        # onCreate(Bundle savedInstanceState): void
+        + onSupportNavigateUp(): boolean
+    }
+
+    class ProfileActivity {
+        - TextView tvUserEmail
+        - Button btnLogoutProfile
+        - Button btnBackProfile
+        # onCreate(Bundle savedInstanceState): void
+    }
+
+    class SharedPrefsUtils {
+        - {static} String PREF_NAME
+        - {static} String KEY_EMAIL
+        - {static} String KEY_TOKEN
+        + {static} saveSession(Context context, String email, String token): void
+        + {static} getEmail(Context context): String
+        + {static} clearSession(Context context): void
+    }
+
+    class RestClient {
+        + {static} makeRequest(String urlString, String method, String jsonBody, String apiKey, VolleyCallback callback): void
+    }
+}
+
+WorkoutPlan "1" o-- "*" Exercise : contains
+MainActivity --> CustomAdapter : uses
+CustomAdapter --> Exercise : displays
+LoginActivity ..> SharedPrefsUtils : reads/writes
+ProfileActivity ..> SharedPrefsUtils : reads/clears
+MainActivity ..> SharedPrefsUtils : clears
+LoginActivity ..> RestClient : invokes
+RegisterActivity ..> RestClient : invokes
+LoginActivity ..> InvalidCredentialsException : throws
+
+@enduml

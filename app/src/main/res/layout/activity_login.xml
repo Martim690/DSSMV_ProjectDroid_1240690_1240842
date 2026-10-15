@@ -14,13 +14,13 @@
         android:src="@drawable/logo"
         android:scaleType="fitCenter"
         android:layout_marginBottom="32dp"
-        android:contentDescription="MRGYM Logo" />
+        android:contentDescription="@string/logo_description" />
 
     <EditText
         android:id="@+id/etEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Email"
+        android:hint="@string/hint_email"
         android:inputType="textEmailAddress"
         android:minHeight="48dp"
         android:backgroundTint="@color/primary_green"
@@ -30,7 +30,7 @@
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Password"
+        android:hint="@string/hint_password"
         android:inputType="textPassword"
         android:minHeight="48dp"
         android:backgroundTint="@color/primary_green"
@@ -40,7 +40,7 @@
         android:id="@+id/btnLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login"
+        android:text="@string/btn_login"
         android:backgroundTint="@color/primary_green"
         android:textColor="@color/white"
         android:layout_marginBottom="16dp" />
@@ -49,7 +49,7 @@
         android:id="@+id/btnGoToRegister"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Create Account"
+        android:text="@string/btn_create_account"
         android:backgroundTint="@color/primary_dark_green"
         android:textColor="@color/white" />
 
