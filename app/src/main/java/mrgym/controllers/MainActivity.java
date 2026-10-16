@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private ListView listViewExercises;
     private CustomAdapter adapter;
     private List<Exercise> exerciseList;
-    private Button btnCamera, btnWorkout, btnProfile;
+    private Button btnJournal, btnWorkout, btnProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         listViewExercises = findViewById(R.id.listViewExercises);
-        btnCamera = findViewById(R.id.btnCamera);
+        btnJournal = findViewById(R.id.btnJournal);
         btnWorkout = findViewById(R.id.btnWorkout);
         btnProfile = findViewById(R.id.btnProfile);
         
@@ -45,10 +45,10 @@ public class MainActivity extends AppCompatActivity {
         adapter = new CustomAdapter(this, exerciseList);
         listViewExercises.setAdapter(adapter);
 
-        btnCamera.setOnClickListener(new View.OnClickListener() {
+        btnJournal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(MainActivity.this, JournalActivity.class));
             }
         });
 

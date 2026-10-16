@@ -1,0 +1,15 @@
+@startuml
+autonumber
+actor "Gym User" as User
+participant ":System" as System
+
+activate User
+User -> System : submitInvalidCredentials(email, password)
+activate System
+
+note right of System: The system checks inputs against RestDB,\ndetects unmatched credentials, and raises an exception.
+
+System --> User : displays user-friendly error message ("Invalid credentials...")
+deactivate System
+deactivate User
+@enduml

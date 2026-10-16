@@ -1,0 +1,24 @@
+@startuml
+autonumber
+actor "Gym User" as User
+participant ":System" as System
+
+activate User
+User -> System : openProfileScreen()
+activate System
+
+note right of System: Retrieves logged-in user email\nfrom persistent storage.
+
+System --> User : displays Profile screen with email and Back / Logout options
+
+alt Clicks Back
+    User -> System : clickBack()
+    System --> User : returns to previous screen
+else Clicks Logout
+    User -> System : clickLogout()
+    System --> User : clears user session and redirects to Login screen
+end
+
+deactivate System
+deactivate User
+@enduml

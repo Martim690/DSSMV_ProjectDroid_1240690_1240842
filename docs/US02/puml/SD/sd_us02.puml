@@ -1,0 +1,39 @@
+@startuml
+autonumber
+actor "Gym User" as User
+participant "RegisterActivity" as UI
+participant "JsonObject\n(Gson)" as JSON
+participant "RestClient" as Net
+database "RestDB (REST API)" as API
+
+activate User
+User -> UI : clicks Register button
+activate UI
+
+note right of UI: Validates non-empty\nname, email, and password
+
+UI -> JSON ** : new JsonObject()
+UI -> JSON : addProperty("name", name)
+UI -> JSON : addProperty("email", email)
+UI -> JSON : addProperty("password", password)
+UI -> JSON : addProperty("active", true)
+
+UI -> Net : makeRequest(url, "POST", json.toString(), apiKey, callback)
+activate Net
+
+note right of Net: Runs asynchronously via AsyncTask\nand HttpURLConnection (Off-UI-Thread)
+
+Net -> API : POST /rest/users (JSON payload with headers)
+activate API
+API --> Net : 201 Created (new record JSON)
+deactivate API
+
+Net --> UI : onSuccess(result)
+deactivate Net
+
+note right of UI: Displays "Account created successfully!" (Toast)\nand finishes activity to return to Login
+
+UI -> UI : finish()
+deactivate UI
+deactivate User
+@enduml

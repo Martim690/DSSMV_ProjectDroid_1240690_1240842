@@ -1,0 +1,31 @@
+@startuml
+autonumber
+actor "Gym User" as User
+participant "WorkoutActivity" as UI
+participant "Toolbar\n(toolbarWorkout)" as Toolbar
+participant "ActionBar" as Bar
+
+activate User
+User -> UI : opens Workouts (triggers onCreate)
+activate UI
+
+UI -> Toolbar : findViewById(R.id.toolbarWorkout)
+UI -> UI : setSupportActionBar(toolbar)
+
+UI -> Bar : getSupportActionBar()
+activate Bar
+UI -> Bar : setDisplayHomeAsUpEnabled(true)
+UI -> Bar : setDisplayShowHomeEnabled(true)
+UI -> Bar : setTitle(R.string.label_workout_management)
+deactivate Bar
+
+note right of UI: Sets up layout views:\nlistViewWorkouts, tvEmptyWorkouts, btnAddWorkout
+
+alt User clicks Toolbar Back Arrow
+    User -> UI : clicks back button (triggers onSupportNavigateUp)
+    UI -> UI : finish()
+end
+
+deactivate UI
+deactivate User
+@enduml

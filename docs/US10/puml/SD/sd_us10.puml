@@ -1,0 +1,56 @@
+@startuml
+autonumber
+actor "Gym User" as User
+participant "JournalActivity" as UI
+participant "Android OS\n(Camera Intent)" as Cam
+participant "FileOutputStream" as FOS
+participant "File (Internal Storage)" as File
+participant "JournalAdapter" as Adapter
+
+activate User
+User -> UI : clicks Take Photo button
+activate UI
+
+note right of UI: Checks runtime permission\n(Manifest.permission.CAMERA)
+
+alt Permission Granted
+    UI -> Cam : startActivityForResult(new Intent(ACTION_IMAGE_CAPTURE))
+    activate Cam
+    Cam --> UI : onActivityResult(RESULT_OK, data)
+    deactivate Cam
+
+    UI -> UI : extract photo Bitmap from Intent extras
+
+    UI -> File ** : new File(getFilesDir()/journal, "journal_<timestamp>.jpg")
+    UI -> FOS ** : new FileOutputStream(file)
+    activate FOS
+    UI -> FOS : bitmap.compress(JPEG, 90, fos)
+    UI -> FOS : close()
+    deactivate FOS
+
+    UI -> UI : loadPhotos()
+    note right of UI: Scans journal directory,\nsorts files by lastModified (oldest to newest),\nand updates photoList
+
+    UI -> Adapter : notifyDataSetChanged()
+    activate Adapter
+    Adapter --> UI : gallery refreshed
+    deactivate Adapter
+else Permission Denied
+    UI -> UI : show Toast("Camera permission is required...")
+end
+
+opt User clicks Delete on a photo
+    User -> UI : clicks Delete button on item
+    UI -> File : delete()
+    activate File
+    File --> UI : file deleted
+    deactivate File
+    UI -> Adapter : notifyDataSetChanged()
+    activate Adapter
+    Adapter --> UI : item removed from view
+    deactivate Adapter
+end
+
+deactivate UI
+deactivate User
+@enduml

@@ -1,0 +1,50 @@
+@startuml
+autonumber
+actor "Gym User" as User
+participant "LoginActivity" as UI
+participant "RestClient" as Net
+database "RestDB (REST API)" as API
+participant "SharedPrefsUtils" as Prefs
+participant "InvalidCredentialsException" as Ex
+participant "MainActivity" as Main
+
+activate User
+User -> UI : clicks Login button
+activate UI
+
+note right of UI: Validates non-empty\nemail and password
+
+UI -> Net : makeRequest(url, "GET", null, apiKey, callback)
+activate Net
+
+note right of Net: Runs asynchronously via AsyncTask\nand HttpURLConnection (Off-UI-Thread)
+
+Net -> API : GET /rest/users?q={"email":"...","password":"..."}
+activate API
+API --> Net : 200 OK (JSON array response)
+deactivate API
+
+Net --> UI : onSuccess(result)
+deactivate Net
+
+alt result contains user data (result.length() > 2)
+    UI -> Prefs : saveSession(context, email, token)
+    activate Prefs
+    note right of Prefs: Writes to SharedPreferences\nusing apply() (non-blocking)
+    Prefs --> UI : session saved
+    deactivate Prefs
+
+    UI -> Main ** : new Intent(LoginActivity.this, MainActivity.class)
+    UI -> UI : startActivity(intent)
+    UI -> UI : finish()
+else user not found / empty array
+    UI -> Ex ** : throw new InvalidCredentialsException("Invalid credentials...")
+    activate Ex
+    Ex --> UI : exception thrown
+    deactivate Ex
+    note right of UI: Caught in catch block;\ndisplays Toast error message
+end
+
+deactivate UI
+deactivate User
+@enduml

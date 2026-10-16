@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -22,6 +25,7 @@
         <activity android:name=".controllers.MainActivity" android:exported="false" />
         <activity android:name=".controllers.WorkoutActivity" android:exported="false" />
         <activity android:name=".controllers.ProfileActivity" android:exported="false" />
+        <activity android:name=".controllers.JournalActivity" android:exported="false" />
 
     </application>
 

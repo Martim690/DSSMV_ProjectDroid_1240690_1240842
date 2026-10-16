@@ -79,6 +79,17 @@ package "mrgym.views" {
         + getItemId(int position): long
         + getView(int position, View convertView, ViewGroup parent): View
     }
+
+    class JournalAdapter {
+        - Context context
+        - List<File> photoList
+        - OnDeleteClickListener deleteListener
+        + JournalAdapter(Context context, List<File> photoList, OnDeleteClickListener deleteListener)
+        + getCount(): int
+        + getItem(int position): Object
+        + getItemId(int position): long
+        + getView(int position, View convertView, ViewGroup parent): View
+    }
 }
 
 package "mrgym.exceptions" {
@@ -112,7 +123,7 @@ package "mrgym.controllers" {
         - ListView listViewExercises
         - CustomAdapter adapter
         - List<Exercise> exerciseList
-        - Button btnCamera
+        - Button btnJournal
         - Button btnWorkout
         - Button btnProfile
         # onCreate(Bundle savedInstanceState): void
@@ -136,6 +147,23 @@ package "mrgym.controllers" {
         # onCreate(Bundle savedInstanceState): void
     }
 
+    class JournalActivity {
+        - Toolbar toolbar
+        - Button btnTakePhoto
+        - ListView listViewJournal
+        - TextView tvEmptyJournal
+        - JournalAdapter adapter
+        - List<File> photoList
+        # onCreate(Bundle savedInstanceState): void
+        + onSupportNavigateUp(): boolean
+        # onResume(): void
+        - checkCameraPermission(): void
+        - openCamera(): void
+        - savePhoto(Bitmap bitmap): void
+        - loadPhotos(): void
+        - deletePhoto(int position): void
+    }
+
     class SharedPrefsUtils {
         - {static} String PREF_NAME
         - {static} String KEY_EMAIL
@@ -153,6 +181,11 @@ package "mrgym.controllers" {
 WorkoutPlan "1" o-- "*" Exercise : contains
 MainActivity --> CustomAdapter : uses
 CustomAdapter --> Exercise : displays
+MainActivity --> JournalActivity : launches
+MainActivity --> WorkoutActivity : launches
+MainActivity --> ProfileActivity : launches
+ProfileActivity --> LoginActivity : launches
+JournalActivity --> JournalAdapter : uses
 LoginActivity ..> SharedPrefsUtils : reads/writes
 ProfileActivity ..> SharedPrefsUtils : reads/clears
 MainActivity ..> SharedPrefsUtils : clears

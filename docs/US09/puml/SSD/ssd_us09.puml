@@ -1,0 +1,21 @@
+@startuml
+autonumber
+actor "Gym User" as User
+participant ":System" as System
+
+activate User
+User -> System : openWorkoutsScreen()
+activate System
+
+note right of System: Configures toolbar with back navigation\nand displays empty workout list.
+
+System --> User : displays Workouts screen with back arrow and Add Workout button
+
+opt User clicks Back Navigation Arrow
+    User -> System : clickBackArrow()
+    System --> User : finishes screen and returns to Main Dashboard
+end
+
+deactivate System
+deactivate User
+@enduml

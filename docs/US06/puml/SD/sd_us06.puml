@@ -1,0 +1,34 @@
+@startuml
+autonumber
+actor "Gym User" as User
+participant "MainActivity" as UI
+participant "MenuInflater" as Inflater
+participant "ProfileActivity" as Profile
+participant "SharedPrefsUtils" as Prefs
+participant "LoginActivity" as Login
+
+activate User
+UI -> Inflater : getMenuInflater().inflate(R.menu.menu_main, menu)
+activate Inflater
+Inflater --> UI : menu initialized
+deactivate Inflater
+
+User -> UI : taps menu item (onOptionsItemSelected)
+activate UI
+
+alt item.getItemId() == R.id.menu_profile
+    UI -> Profile ** : new Intent(MainActivity.this, ProfileActivity.class)
+    UI -> UI : startActivity(intent)
+else item.getItemId() == R.id.menu_logout
+    UI -> Prefs : clearSession(MainActivity.this)
+    activate Prefs
+    Prefs --> UI : session cleared
+    deactivate Prefs
+    UI -> Login ** : new Intent(MainActivity.this, LoginActivity.class)
+    UI -> UI : startActivity(intent)
+    UI -> UI : finish()
+end
+
+deactivate UI
+deactivate User
+@enduml

@@ -1,0 +1,41 @@
+@startuml
+autonumber
+actor "Gym User" as User
+participant "LoginActivity" as UI
+participant "SharedPrefsUtils" as Prefs
+participant "SharedPreferences" as SP
+participant "MainActivity" as Main
+
+activate User
+User -> UI : opens application (triggers onCreate)
+activate UI
+
+UI -> Prefs : getEmail(context)
+activate Prefs
+
+Prefs -> SP : getSharedPreferences("MRGymPrefs", MODE_PRIVATE)
+activate SP
+SP --> Prefs : prefs instance
+deactivate SP
+
+Prefs -> SP : getString("email", null)
+activate SP
+SP --> Prefs : savedEmail
+deactivate SP
+
+Prefs --> UI : savedEmail
+deactivate Prefs
+
+alt savedEmail != null (Active Session)
+    note right of UI: Bypasses login screen\nand opens Main Dashboard
+    UI -> Main ** : new Intent(LoginActivity.this, MainActivity.class)
+    UI -> UI : startActivity(intent)
+    UI -> UI : finish()
+else savedEmail == null (No Session)
+    note right of UI: Continues standard initialization\nand loads activity_login.xml
+    UI -> UI : setContentView(R.layout.activity_login)
+end
+
+deactivate UI
+deactivate User
+@enduml

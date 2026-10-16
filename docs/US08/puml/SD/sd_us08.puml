@@ -1,0 +1,32 @@
+@startuml
+autonumber
+actor "Gym User" as User
+participant "MainActivity" as Main
+participant "JournalActivity" as Journal
+participant "WorkoutActivity" as Workout
+participant "ProfileActivity" as Profile
+
+activate User
+
+alt User clicks Journal button
+    User -> Main : clicks btnJournal
+    activate Main
+    Main -> Journal ** : new Intent(MainActivity.this, JournalActivity.class)
+    Main -> Main : startActivity(intent)
+    deactivate Main
+else User clicks Workouts button
+    User -> Main : clicks btnWorkout
+    activate Main
+    Main -> Workout ** : new Intent(MainActivity.this, WorkoutActivity.class)
+    Main -> Main : startActivity(intent)
+    deactivate Main
+else User clicks Profile button
+    User -> Main : clicks btnProfile
+    activate Main
+    Main -> Profile ** : new Intent(MainActivity.this, ProfileActivity.class)
+    Main -> Main : startActivity(intent)
+    deactivate Main
+end
+
+deactivate User
+@enduml

@@ -1,0 +1,22 @@
+@startuml
+autonumber
+actor "Gym User" as User
+participant ":System" as System
+
+activate User
+User -> System : openOptionsMenu()
+activate System
+
+System --> User : displays menu options (Profile, Logout)
+
+alt Selects Profile
+    User -> System : selectMenuItem(Profile)
+    System --> User : navigates to Profile screen
+else Selects Logout
+    User -> System : selectMenuItem(Logout)
+    System --> User : clears user session and redirects to Login screen
+end
+
+deactivate System
+deactivate User
+@enduml

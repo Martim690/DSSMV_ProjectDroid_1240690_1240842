@@ -1,0 +1,36 @@
+@startuml
+autonumber
+actor "Gym User" as User
+participant "LoginActivity" as UI
+participant "RestClient" as Net
+database "RestDB (REST API)" as API
+participant "InvalidCredentialsException" as Ex
+
+activate User
+User -> UI : submits credentials
+activate UI
+
+UI -> Net : makeRequest(url, "GET", null, apiKey, callback)
+activate Net
+
+Net -> API : GET /rest/users?q={"email":"...","password":"..."}
+activate API
+API --> Net : 200 OK (empty array: "[]")
+deactivate API
+
+Net --> UI : onSuccess("[]")
+deactivate Net
+
+note right of UI: Detects result.length() <= 2\n(no matching user record)
+
+UI -> Ex ** : throw new InvalidCredentialsException("Invalid credentials or account does not exist.")
+activate Ex
+Ex --> UI : exception instance
+deactivate Ex
+
+note right of UI: try-catch block catches InvalidCredentialsException\nand triggers Toast.makeText()
+
+UI -> User : shows Toast with e.getMessage()
+deactivate UI
+deactivate User
+@enduml

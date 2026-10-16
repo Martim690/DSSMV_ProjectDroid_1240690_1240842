@@ -1,0 +1,20 @@
+@startuml
+autonumber
+actor "Gym User" as User
+participant ":System" as System
+
+activate User
+User -> System : launchesApplication()
+activate System
+
+note right of System: The system checks for an existing\nactive session in SharedPreferences.
+
+alt Active Session Found
+    System --> User : automatically redirects to Main Dashboard
+else No Active Session
+    System --> User : displays Login screen for credential entry
+end
+
+deactivate System
+deactivate User
+@enduml

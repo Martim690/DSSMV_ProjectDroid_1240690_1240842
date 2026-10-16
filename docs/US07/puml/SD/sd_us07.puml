@@ -1,0 +1,39 @@
+@startuml
+autonumber
+actor "Gym User" as User
+participant "ProfileActivity" as UI
+participant "SharedPrefsUtils" as Prefs
+participant "TextView\n(tvUserEmail)" as TextView
+participant "LoginActivity" as Login
+
+activate User
+User -> UI : navigates to Profile (triggers onCreate)
+activate UI
+
+UI -> Prefs : getEmail(this)
+activate Prefs
+Prefs --> UI : email
+deactivate Prefs
+
+UI -> TextView : setText(email)
+activate TextView
+TextView --> UI : text updated
+deactivate TextView
+
+alt User clicks Back button
+    User -> UI : clicks btnBackProfile
+    UI -> UI : finish()
+else User clicks Logout button
+    User -> UI : clicks btnLogoutProfile
+    UI -> Prefs : clearSession(ProfileActivity.this)
+    activate Prefs
+    Prefs --> UI : session cleared
+    deactivate Prefs
+    UI -> Login ** : new Intent(ProfileActivity.this, LoginActivity.class)
+    UI -> UI : startActivity(intent)
+    UI -> UI : finish()
+end
+
+deactivate UI
+deactivate User
+@enduml
