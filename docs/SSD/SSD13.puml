@@ -1,0 +1,20 @@
+@startuml
+autonumber
+actor "User" as User
+participant ":System" as System
+
+
+User -> System : clickEndSession()
+
+System -> System: Stops session.
+System --> User : session duration, distance, date, route)
+
+User -> System : confirmSaveSession()
+
+System -> System: Saves session.
+alt Save Successful: True
+    System --> User : returns success
+else Save Successful: False
+    System --> User : returns error
+end
+@enduml

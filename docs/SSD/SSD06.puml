@@ -1,0 +1,20 @@
+@startuml
+autonumber
+
+actor "User" as User
+participant ":System" as System
+
+User -> System : AddWorkout()
+System --> User : displays Create Workout interface with exercise catalog
+
+User -> System : submitWorkoutPlan(name, selectedExercises)
+
+System -> System: Validates inputs.
+alt Valid Plan Data: True
+    System -> System : saves workout plan.
+    System --> User : returns success
+else Valid Plan Data: False
+    System --> User : returns error
+end
+
+@enduml
