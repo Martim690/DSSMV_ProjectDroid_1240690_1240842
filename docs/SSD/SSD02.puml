@@ -1,0 +1,17 @@
+@startuml
+autonumber
+actor "User" as User
+participant ":System" as System
+
+User -> System : enterCredentials(email, password)
+
+System -> System: validates Data
+
+alt Valid Data: True
+    System -> System: enters account
+    System --> User : returns success
+else Valid Data: False
+    System --> User : returns error
+end
+
+@enduml

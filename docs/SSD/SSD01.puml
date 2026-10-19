@@ -1,0 +1,20 @@
+@startuml
+autonumber
+
+actor "User" as User
+participant ":System" as System
+
+
+User -> System : enterRegistrationDetails(name, email, password)
+
+System -> System : Validates data and sends POST request to RestDB
+
+alt Valid Data: True
+    System -> System : creates account
+    System --> User : returns success
+
+else Valid Data: False
+    System --> User : returns error
+end
+
+@enduml

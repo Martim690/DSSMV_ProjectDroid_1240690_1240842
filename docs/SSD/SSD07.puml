@@ -1,0 +1,19 @@
+@startuml
+autonumber
+actor "User" as User
+participant ":System" as System
+
+User -> System : requestEditWorkout(workoutId)
+
+System --> User : loads existing workout data into editable form
+
+User -> System : updateWorkoutPlan(workoutId, updatedName, updatedExercises)
+
+System -> System: Validates new data
+alt Valid Update: True
+    System -> System : updates workout
+    System --> User : returns success
+else Valid Update: False
+    System --> User : returns error
+
+@enduml

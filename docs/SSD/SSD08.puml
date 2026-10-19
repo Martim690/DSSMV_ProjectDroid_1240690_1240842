@@ -1,0 +1,19 @@
+@startuml
+
+autonumber
+actor "User" as User
+participant ":System" as System
+
+User -> System : deleteWorkout(workoutId)
+
+System --> User : Aks for delete confirmation
+
+User -> System : confirmDelete(workoutId)
+System -> System: Deletes workout
+
+System --> User : returns success
+
+
+
+
+@enduml

@@ -1,0 +1,17 @@
+@startuml
+autonumber
+actor "User" as User
+participant ":System" as System
+
+User -> System : clickStartSession()
+
+System -> System: Checks for Location permission.
+alt Location Permission: True
+    System -> System: Starts sesssion.
+    System --> User : location, distance, time elapsed
+
+else Location Permission: False
+    System --> User : returns error
+end
+
+@enduml
