@@ -24,6 +24,7 @@
         <activity android:name=".controllers.RegisterActivity" android:exported="false" />
         <activity android:name=".controllers.MainActivity" android:exported="false" />
         <activity android:name=".controllers.WorkoutActivity" android:exported="false" />
+        <activity android:name=".controllers.CreateWorkoutActivity" android:exported="false" />
         <activity android:name=".controllers.ProfileActivity" android:exported="false" />
         <activity android:name=".controllers.JournalActivity" android:exported="false" />
 

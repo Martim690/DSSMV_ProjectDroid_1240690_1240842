@@ -6,23 +6,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import java.util.ArrayList;
-import java.util.List;
 import mrgym.R;
-import mrgym.views.CustomAdapter;
-import mrgym.models.Exercise;
-import mrgym.controllers.SharedPrefsUtils;
 
 public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
-    private ListView listViewExercises;
-    private CustomAdapter adapter;
-    private List<Exercise> exerciseList;
     private Button btnJournal, btnWorkout, btnProfile;
 
     @Override
@@ -36,14 +27,9 @@ public class MainActivity extends AppCompatActivity {
             getSupportActionBar().setTitle(R.string.app_name);
         }
 
-        listViewExercises = findViewById(R.id.listViewExercises);
         btnJournal = findViewById(R.id.btnJournal);
         btnWorkout = findViewById(R.id.btnWorkout);
         btnProfile = findViewById(R.id.btnProfile);
-        
-        exerciseList = new ArrayList<>();
-        adapter = new CustomAdapter(this, exerciseList);
-        listViewExercises.setAdapter(adapter);
 
         btnJournal.setOnClickListener(new View.OnClickListener() {
             @Override
