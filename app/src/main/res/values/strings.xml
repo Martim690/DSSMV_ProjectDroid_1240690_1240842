@@ -31,4 +31,6 @@
     <string name="msg_photo_saved">Photo saved!</string>
     <string name="msg_photo_deleted">Photo deleted.</string>
     <string name="msg_camera_error">Could not open camera.</string>
+    <string name="welcome_title">Welcome to MRGym</string>
+    <string name="welcome_subtitle">Track your workouts, follow your progress, and record your physical evolution.</string>
 </resources>

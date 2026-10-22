@@ -120,15 +120,10 @@ package "mrgym.controllers" {
 
     class MainActivity {
         - Toolbar toolbar
-        - ListView listViewExercises
-        - CustomAdapter adapter
-        - List<Exercise> exerciseList
         - Button btnJournal
         - Button btnWorkout
         - Button btnProfile
         # onCreate(Bundle savedInstanceState): void
-        + onCreateOptionsMenu(Menu menu): boolean
-        + onOptionsItemSelected(MenuItem item): boolean
     }
 
     class WorkoutActivity {
@@ -179,7 +174,7 @@ package "mrgym.controllers" {
 }
 
 WorkoutPlan "1" o-- "*" Exercise : contains
-MainActivity --> CustomAdapter : uses
+WorkoutActivity --> CustomAdapter : uses
 CustomAdapter --> Exercise : displays
 MainActivity --> JournalActivity : launches
 MainActivity --> WorkoutActivity : launches
@@ -188,7 +183,6 @@ ProfileActivity --> LoginActivity : launches
 JournalActivity --> JournalAdapter : uses
 LoginActivity ..> SharedPrefsUtils : reads/writes
 ProfileActivity ..> SharedPrefsUtils : reads/clears
-MainActivity ..> SharedPrefsUtils : clears
 LoginActivity ..> RestClient : invokes
 RegisterActivity ..> RestClient : invokes
 LoginActivity ..> InvalidCredentialsException : throws

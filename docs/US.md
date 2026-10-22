@@ -13,7 +13,7 @@ This document defines all functional User Stories for the MRGym native Android a
 | **US03** | User Logout | Clear persistent local session and reset back stack. | **finished** |
 | **US04** | Session Persistence & Auto-Login | Check local session on launch and bypass login automatically. | **finished** |
 | **US05** | Authentication Error Feedback | Handle login errors with custom `InvalidCredentialsException`. | **finished** |
-| **US06** | Main Toolbar & Options Menu | Provide application header with Profile and Logout actions. | **finished** |
+| **US06** | Main Toolbar | Provide application header with screen title. | **finished** |
 | **US07** | User Profile Screen | View authenticated account details and logout action. | **finished** |
 | **US08** | Core Screen Navigation | Explicit Intent navigation between Main, Workouts, Profile, and Journal. | **finished** |
 | **US09** | Workout Management Interface | Interface layout for workouts with empty state and Add button. | **finished** |

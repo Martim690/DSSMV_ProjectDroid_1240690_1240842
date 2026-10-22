@@ -2,33 +2,26 @@
 autonumber
 actor "Gym User" as User
 participant "MainActivity" as UI
-participant "MenuInflater" as Inflater
-participant "ProfileActivity" as Profile
-participant "SharedPrefsUtils" as Prefs
-participant "LoginActivity" as Login
+participant "Toolbar" as Toolbar
+participant "ActionBar" as ActionBar
 
 activate User
-UI -> Inflater : getMenuInflater().inflate(R.menu.menu_main, menu)
-activate Inflater
-Inflater --> UI : menu initialized
-deactivate Inflater
-
-User -> UI : taps menu item (onOptionsItemSelected)
+User -> UI : launches / enters MainActivity
 activate UI
 
-alt item.getItemId() == R.id.menu_profile
-    UI -> Profile ** : new Intent(MainActivity.this, ProfileActivity.class)
-    UI -> UI : startActivity(intent)
-else item.getItemId() == R.id.menu_logout
-    UI -> Prefs : clearSession(MainActivity.this)
-    activate Prefs
-    Prefs --> UI : session cleared
-    deactivate Prefs
-    UI -> Login ** : new Intent(MainActivity.this, LoginActivity.class)
-    UI -> UI : startActivity(intent)
-    UI -> UI : finish()
-end
+UI -> UI : setContentView(R.layout.activity_main)
+UI -> Toolbar : findViewById(R.id.toolbar)
+activate Toolbar
+Toolbar --> UI : toolbar
+deactivate Toolbar
 
+UI -> UI : setSupportActionBar(toolbar)
+UI -> ActionBar : setTitle(R.string.app_name)
+activate ActionBar
+ActionBar --> UI : title set
+deactivate ActionBar
+
+UI --> User : displays main dashboard with toolbar header
 deactivate UI
 deactivate User
 @enduml
