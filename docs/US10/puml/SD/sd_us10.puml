@@ -2,55 +2,76 @@
 autonumber
 actor "Gym User" as User
 participant "JournalActivity" as UI
-participant "Android OS\n(Camera Intent)" as Cam
+participant "Android OS\n(Camera/Gallery)" as OS
+participant "AlertDialog\n(Entry Dialog)" as Dialog
 participant "FileOutputStream" as FOS
-participant "File (Internal Storage)" as File
+participant "File (Storage)" as File
 participant "JournalAdapter" as Adapter
 
 activate User
-User -> UI : clicks Take Photo button
-activate UI
-
-note right of UI: Checks runtime permission\n(Manifest.permission.CAMERA)
-
-alt Permission Granted
-    UI -> Cam : startActivityForResult(new Intent(ACTION_IMAGE_CAPTURE))
-    activate Cam
-    Cam --> UI : onActivityResult(RESULT_OK, data)
-    deactivate Cam
-
-    UI -> UI : extract photo Bitmap from Intent extras
-
-    UI -> File ** : new File(getFilesDir()/journal, "journal_<timestamp>.jpg")
-    UI -> FOS ** : new FileOutputStream(file)
-    activate FOS
-    UI -> FOS : bitmap.compress(JPEG, 90, fos)
-    UI -> FOS : close()
-    deactivate FOS
-
-    UI -> UI : loadPhotos()
-    note right of UI: Scans journal directory,\nsorts files by lastModified (oldest to newest),\nand updates photoList
-
-    UI -> Adapter : notifyDataSetChanged()
-    activate Adapter
-    Adapter --> UI : gallery refreshed
-    deactivate Adapter
-else Permission Denied
-    UI -> UI : show Toast("Camera permission is required...")
+alt Take Photo via Camera
+    User -> UI : clicks Take Photo button
+    activate UI
+    UI -> OS : startActivityForResult(ACTION_IMAGE_CAPTURE)
+    activate OS
+    OS --> UI : onActivityResult(RESULT_OK, data)
+    deactivate OS
+else Choose from Gallery
+    User -> UI : clicks Gallery button
+    UI -> OS : startActivityForResult(ACTION_PICK)
+    activate OS
+    OS --> UI : onActivityResult(RESULT_OK, data)
+    deactivate OS
 end
 
-opt User clicks Delete on a photo
-    User -> UI : clicks Delete button on item
-    UI -> File : delete()
-    activate File
-    File --> UI : file deleted
-    deactivate File
-    UI -> Adapter : notifyDataSetChanged()
-    activate Adapter
-    Adapter --> UI : item removed from view
-    deactivate Adapter
-end
+UI -> Dialog ** : showEntryDetailsDialog(photoBitmap)
+activate Dialog
+Dialog --> User : displays photo preview and prompts for weight and height
+deactivate Dialog
 
+User -> Dialog : inputs metrics and clicks Save
+activate Dialog
+Dialog -> UI : onSave(weight, height)
+deactivate Dialog
+
+UI -> File ** : new File(getFilesDir()/journal, "journal_<timestamp>.jpg")
+UI -> FOS ** : new FileOutputStream(file)
+activate FOS
+UI -> FOS : bitmap.compress(JPEG, 90, fos)
+UI -> FOS : close()
+deactivate FOS
+
+UI -> UI : persistEntries()
+note right of UI: Appends new JournalEntry and writes\nupdated list to entries.json (Gson)
+
+UI -> UI : loadEntries()
+UI -> Adapter : notifyDataSetChanged()
+activate Adapter
+Adapter --> UI : gallery refreshed with date and metrics
+deactivate Adapter
+
+UI --> User : displays updated evolution journal
 deactivate UI
+
+opt User clicks Delete on an entry
+    User -> UI : clicks Delete button
+    activate UI
+    UI -> Dialog ** : confirmDeleteEntry()
+    activate Dialog
+    Dialog --> User : prompts confirmation ("Are you sure?")
+    deactivate Dialog
+    User -> Dialog : clicks Yes
+    activate Dialog
+    Dialog -> UI : deleteEntry(position)
+    deactivate Dialog
+    UI -> File : delete()
+    UI -> UI : persistEntries()
+    UI -> Adapter : notifyDataSetChanged()
+    activate Adapter
+    Adapter --> UI : entry removed
+    deactivate Adapter
+    deactivate UI
+end
+
 deactivate User
 @enduml

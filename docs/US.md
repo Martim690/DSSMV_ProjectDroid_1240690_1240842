@@ -13,11 +13,11 @@ This document defines all functional User Stories for the MRGym native Android a
 | **US03** | User Logout | Clear persistent local session and reset back stack. | **finished** |
 | **US04** | Session Persistence & Auto-Login | Check local session on launch and bypass login automatically. | **finished** |
 | **US05** | Authentication Error Feedback | Handle login errors with custom `InvalidCredentialsException`. | **finished** |
-| **US06** | Main Toolbar & Options Menu | Provide application header with Profile and Logout actions. | **finished** |
+| **US06** | Main Toolbar | Provide application header with screen title. | **finished** |
 | **US07** | User Profile Screen | View authenticated account details and logout action. | **finished** |
 | **US08** | Core Screen Navigation | Explicit Intent navigation between Main, Workouts, Profile, and Journal. | **finished** |
 | **US09** | Workout Management Interface | Interface layout for workouts with empty state and Add button. | **finished** |
-| **US10** | Evolution Journal (Camera & Gallery) | Capture body progress photos, display chronological gallery, and delete. | **finished** |
+| **US10** | Evolution Journal (Camera, Gallery & Metrics) | Capture body progress photos from camera or gallery, record weight and height metrics, display chronological gallery, and delete. | **finished** |
 | **US11** | Public Exercises List (Wger API) | Fetch and display public exercises from Wger REST API. | **working** |
 | **US12** | Create Workout Plan | Compose and persist workout plans with selected exercises in RestDB. | **working** |
 | **US13** | View User Workout Plans | Retrieve and display user's saved workout plans from RestDB. | **working** |

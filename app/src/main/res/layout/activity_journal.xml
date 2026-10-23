@@ -22,21 +22,44 @@
         android:gravity="center"
         android:padding="24dp" />
 
-    <ListView
-        android:id="@+id/listViewJournal"
+    <GridView
+        android:id="@+id/gridViewJournal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:numColumns="2"
+        android:horizontalSpacing="8dp"
+        android:verticalSpacing="8dp"
         android:padding="8dp"
-        android:clipToPadding="false" />
+        android:clipToPadding="false"
+        android:stretchMode="columnWidth" />
 
-    <Button
-        android:id="@+id/btnTakePhoto"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/btn_take_photo"
-        android:backgroundTint="@color/primary_green"
-        android:textColor="@color/white"
-        android:layout_margin="16dp" />
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <Button
+            android:id="@+id/btnTakePhoto"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:text="@string/btn_take_photo"
+            android:backgroundTint="@color/primary_green"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/btnPickGallery"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="@string/btn_pick_gallery"
+            android:backgroundTint="@color/primary_dark_green"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
 
 </LinearLayout>

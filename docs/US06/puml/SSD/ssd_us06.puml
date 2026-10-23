@@ -4,19 +4,12 @@ actor "Gym User" as User
 participant ":System" as System
 
 activate User
-User -> System : openOptionsMenu()
+User -> System : accessMainDashboard()
 activate System
 
-System --> User : displays menu options (Profile, Logout)
+note right of System: The system initializes the Toolbar\nand sets the application header title.
 
-alt Selects Profile
-    User -> System : selectMenuItem(Profile)
-    System --> User : navigates to Profile screen
-else Selects Logout
-    User -> System : selectMenuItem(Logout)
-    System --> User : clears user session and redirects to Login screen
-end
-
+System --> User : displays main dashboard with application header
 deactivate System
 deactivate User
 @enduml

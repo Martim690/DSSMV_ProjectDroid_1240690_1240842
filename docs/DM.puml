@@ -23,14 +23,16 @@ class WorkoutLog {
     durationMinutes
 }
 
-class EvolutionPhoto {
+class JournalEntry {
     date
-    filePath
+    photoPath
+    weight
+    height
 }
 
 User "1" --> "0..*" WorkoutPlan : creates >
 User "1" --> "0..*" WorkoutLog : logs >
-User "1" --> "0..*" EvolutionPhoto : captures in Journal >
+User "1" --> "0..*" JournalEntry : records >
 WorkoutPlan "1" --> "1..*" Exercise : contains >
 WorkoutLog "0..*" --> "1" WorkoutPlan : references >
 
