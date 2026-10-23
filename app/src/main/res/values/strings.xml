@@ -27,11 +27,24 @@
     <string name="label_logged_as">Logged in as:</string>
     <string name="logo_description">MRGym Logo</string>
     <string name="msg_empty_workouts">No workouts saved yet.</string>
-    <string name="msg_empty_journal">No photos yet. Start tracking your progress!</string>
+    <string name="msg_empty_journal">No entries yet. Start tracking your progress!</string>
     <string name="msg_camera_permission_denied">Camera permission is required to take photos.</string>
     <string name="msg_photo_saved">Photo saved!</string>
     <string name="msg_photo_deleted">Photo deleted.</string>
     <string name="msg_camera_error">Could not open camera.</string>
     <string name="welcome_title">Welcome to MRGym</string>
     <string name="welcome_subtitle">Track your workouts, follow your progress, and record your physical evolution.</string>
+    <string name="btn_pick_gallery">Gallery</string>
+    <string name="title_new_journal_entry">New Journal Entry</string>
+    <string name="hint_weight">Weight (kg)</string>
+    <string name="hint_height">Height (cm)</string>
+    <string name="hint_body_fat">Body Fat % (optional)</string>
+    <string name="hint_notes">Notes (optional)</string>
+    <string name="btn_save_entry">Save</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="msg_confirm_delete_journal">Are you sure you want to delete this journal entry?</string>
+    <string name="btn_yes">Yes</string>
+    <string name="btn_no">No</string>
+    <string name="msg_entry_saved">Journal entry saved!</string>
+    <string name="msg_entry_deleted">Journal entry deleted.</string>
 </resources>

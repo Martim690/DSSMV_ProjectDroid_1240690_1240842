@@ -67,6 +67,27 @@ package "mrgym.models" {
         + setDurationMinutes(int durationMinutes): void
         + toString(): String
     }
+
+    class JournalEntry {
+        - String id
+        - String photoPath
+        - long timestamp
+        - double weight
+        - double height
+        + JournalEntry()
+        + JournalEntry(String id, String photoPath, long timestamp, double weight, double height)
+        + getId(): String
+        + setId(String id): void
+        + getPhotoPath(): String
+        + setPhotoPath(String photoPath): void
+        + getTimestamp(): long
+        + setTimestamp(long timestamp): void
+        + getWeight(): double
+        + setWeight(double weight): void
+        + getHeight(): double
+        + setHeight(double height): void
+        + toString(): String
+    }
 }
 
 package "mrgym.views" {
@@ -82,9 +103,10 @@ package "mrgym.views" {
 
     class JournalAdapter {
         - Context context
-        - List<File> photoList
+        - List<JournalEntry> entryList
         - OnDeleteClickListener deleteListener
-        + JournalAdapter(Context context, List<File> photoList, OnDeleteClickListener deleteListener)
+        - OnPhotoClickListener photoClickListener
+        + JournalAdapter(Context context, List<JournalEntry> entryList, OnDeleteClickListener deleteListener, OnPhotoClickListener photoClickListener)
         + getCount(): int
         + getItem(int position): Object
         + getItemId(int position): long
@@ -145,18 +167,29 @@ package "mrgym.controllers" {
     class JournalActivity {
         - Toolbar toolbar
         - Button btnTakePhoto
-        - ListView listViewJournal
+        - Button btnPickGallery
+        - GridView gridViewJournal
         - TextView tvEmptyJournal
         - JournalAdapter adapter
-        - List<File> photoList
+        - List<JournalEntry> allEntries
+        - List<JournalEntry> displayedEntries
+        - int currentPage
+        - boolean isLoading
+        - Gson gson
         # onCreate(Bundle savedInstanceState): void
         + onSupportNavigateUp(): boolean
         # onResume(): void
         - checkCameraPermission(): void
         - openCamera(): void
-        - savePhoto(Bitmap bitmap): void
-        - loadPhotos(): void
-        - deletePhoto(int position): void
+        - openGallery(): void
+        - showEntryDetailsDialog(Bitmap photoBitmap): void
+        - saveJournalEntry(Bitmap bitmap, double weight, double height): void
+        - persistEntries(): void
+        - loadEntries(): void
+        - loadNextPage(): void
+        - showPhotoDetailDialog(JournalEntry entry): void
+        - confirmDeleteEntry(int position): void
+        - deleteEntry(int position): void
     }
 
     class SharedPrefsUtils {
@@ -181,6 +214,8 @@ MainActivity --> WorkoutActivity : launches
 MainActivity --> ProfileActivity : launches
 ProfileActivity --> LoginActivity : launches
 JournalActivity --> JournalAdapter : uses
+JournalAdapter --> JournalEntry : displays
+JournalActivity ..> JournalEntry : manages
 LoginActivity ..> SharedPrefsUtils : reads/writes
 ProfileActivity ..> SharedPrefsUtils : reads/clears
 LoginActivity ..> RestClient : invokes

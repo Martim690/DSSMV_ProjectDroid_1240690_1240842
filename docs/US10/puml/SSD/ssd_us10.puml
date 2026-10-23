@@ -4,22 +4,33 @@ actor "Gym User" as User
 participant ":System" as System
 
 activate User
-User -> System : captureEvolutionPhoto()
+alt Take Photo via Camera
+    User -> System : triggerCameraPhoto()
+else Choose from Gallery
+    User -> System : pickGalleryPhoto()
+end
 activate System
 
-note right of System: The system requests camera permission\nif needed, triggers device camera, persists\nphoto locally, and updates gallery.
-
-alt Photo Captured & Saved
-    System --> User : persists image with timestamp and displays updated photo in chronological gallery
-else Permission Denied / Cancelled
-    System --> User : displays permission warning message (Toast)
-end
-
-opt Delete Photo
-    User -> System : deletePhoto(selectedPhoto)
-    System --> User : removes photo file from storage and refreshes gallery
-end
-
+System --> User : displays photo preview and prompts for metrics (weight, height)
 deactivate System
+
+User -> System : submitsMetrics(weight, height)
+activate System
+note right of System: The system persists the photo and metrics\nlocally, recording timestamp and details.
+
+System --> User : confirms entry saved and displays updated evolution journal
+deactivate System
+
+opt Delete Entry
+    User -> System : deleteJournalEntry(selectedEntry)
+    activate System
+    System --> User : requests confirmation ("Are you sure?")
+    deactivate System
+    User -> System : confirmsDeletion()
+    activate System
+    System --> User : removes entry and photo from storage and refreshes gallery
+    deactivate System
+end
+
 deactivate User
 @enduml
