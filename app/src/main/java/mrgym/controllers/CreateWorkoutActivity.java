@@ -26,7 +26,7 @@ public class CreateWorkoutActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private EditText etWorkoutName;
-    private Button btnCreateWorkout, btnCancelWorkout;
+    private Button btnCreateWorkout;
     private TextView tvSelectedCount;
     private ProgressBar progressBarExercises;
     private ListView listViewAvailableExercises;
@@ -49,7 +49,6 @@ public class CreateWorkoutActivity extends AppCompatActivity {
 
         etWorkoutName = findViewById(R.id.etWorkoutName);
         btnCreateWorkout = findViewById(R.id.btnCreateWorkout);
-        btnCancelWorkout = findViewById(R.id.btnCancelWorkout);
         tvSelectedCount = findViewById(R.id.tvSelectedCount);
         progressBarExercises = findViewById(R.id.progressBarExercises);
         listViewAvailableExercises = findViewById(R.id.listViewAvailableExercises);
@@ -67,13 +66,6 @@ public class CreateWorkoutActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 adapter.toggleSelection(position);
-            }
-        });
-
-        btnCancelWorkout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
             }
         });
 

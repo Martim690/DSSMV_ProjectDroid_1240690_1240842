@@ -23,43 +23,22 @@
             android:id="@+id/etWorkoutName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Workout Name (e.g. Leg Day)"
+            android:hint="@string/hint_workout_name"
             android:textSize="16sp"
             android:textColor="@color/primary_dark_green"
             android:padding="12dp"
             android:background="@android:drawable/editbox_background_normal"
             android:layout_marginBottom="12dp" />
 
-        <LinearLayout
+        <Button
+            android:id="@+id/btnCreateWorkout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <Button
-                android:id="@+id/btnCreateWorkout"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:text="Create Workout"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:textColor="@color/white"
-                android:backgroundTint="@color/primary_green"
-                android:layout_marginEnd="8dp" />
-
-            <Button
-                android:id="@+id/btnCancelWorkout"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:text="✕"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/white"
-                android:backgroundTint="@color/primary_dark_green"
-                android:padding="0dp" />
-
-        </LinearLayout>
+            android:layout_height="48dp"
+            android:text="Create Workout"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/primary_green" />
 
         <TextView
             android:id="@+id/tvSelectedCount"
