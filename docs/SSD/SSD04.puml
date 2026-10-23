@@ -1,0 +1,11 @@
+@startuml
+autonumber
+
+actor "User" as User
+participant ":System" as System
+
+User -> System : logout()
+System -> System : leaves account
+System --> User : returns to login screen
+
+@enduml

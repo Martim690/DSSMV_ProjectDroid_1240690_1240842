@@ -1,0 +1,15 @@
+@startuml
+
+autonumber
+actor "User" as User
+participant ":System" as System
+
+User -> System : openOutdoorHistory()
+
+System -> System: Gets session history for logged user.
+System --> User : lists sessions
+
+User -> System : selectSession(sessionId)
+System --> User : displays full session summary (date, duration, distance, pace, start/end locations)
+
+@enduml

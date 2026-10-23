@@ -1,0 +1,20 @@
+@startuml
+autonumber
+actor "User" as User
+participant ":System" as System
+
+User -> System : clickDeleteSession(sessionId)
+System --> User : requests confirmation
+
+User -> System : confirmDeleteSession(sessionId)
+
+System -> System: Deletes sessions.
+
+alt Deletion Successful: True
+        System -> System : removes sessions from database
+        System --> User : returns success
+    else Deletion Successful: False
+        System --> User : returns error
+end
+
+@enduml

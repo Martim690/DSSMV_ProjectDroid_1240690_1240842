@@ -1,0 +1,58 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam actorStyle awesome
+
+actor "User" as user
+
+
+usecase "Account Management" as AM
+usecase "UC01: Create Account " as UC1
+usecase "UC02: Log In" as UC2
+usecase "UC03: View Profile" as UC3
+usecase "UC04: Log Out" as UC4
+
+usecase "Workout Management" as WM
+usecase "UC05: View Workouts" as UC5
+usecase "UC06: Create Workout Plan" as UC6
+usecase "UC07: Edit Workout Plan" as UC7
+usecase "UC08: Delete Workout Plan" as UC8
+
+usecase "Progress Journal Management" as PJM
+usecase "UC09: View Progress Journal" as UC9
+usecase "UC10: Add Entry to Journal" as UC10
+usecase "UC11: Delete Entry From Journal" as UC11
+
+
+usecase "Outdoor Activity Management" as OAM
+usecase "UC12: Start Session" as UC12
+usecase "UC13: End/Save Session" as UC13
+usecase "UC14: View Session" as UC14
+usecase "UC15: Delete Session" as UC15
+
+
+user --> AM
+UC1 ..> AM : <<extends>>
+UC2 ..> AM : <<extends>>
+UC3 ..> AM : <<extends>>
+UC4 ..> AM : <<extends>>
+
+user --> WM
+UC5 ..> WM : <<extends>>
+UC6 ..> WM : <<extends>>
+UC7 ..> WM : <<extends>>
+UC8 ..> WM : <<extends>>
+
+user --> PJM
+UC9 ..> PJM : <<extends>>
+UC10 ..> PJM : <<extends>>
+UC11 ..> PJM : <<extends>>
+
+user --> OAM
+UC12 ..> OAM : <<extends>>
+UC13 ..> OAM : <<extends>>
+UC14 ..> OAM : <<extends>>
+UC15 ..> OAM : <<extends>>
+
+@enduml

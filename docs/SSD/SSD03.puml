@@ -1,0 +1,11 @@
+@startuml
+autonumber
+
+actor "User" as User
+participant ":System" as System
+
+User -> System : openProfile()
+
+System --> User : current user and  email and profile
+
+@enduml

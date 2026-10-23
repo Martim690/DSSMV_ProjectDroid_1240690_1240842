@@ -12,77 +12,53 @@
         android:background="@color/primary_green"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="24dp">
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/ivMainLogo"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:src="@drawable/logo"
+            android:contentDescription="@string/logo_description"
+            android:layout_marginBottom="32dp" />
+
+        <Button
+            android:id="@+id/btnWorkout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_horizontal"
-            android:padding="24dp">
+            android:layout_height="52dp"
+            android:text="@string/btn_workouts"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/primary_green"
+            android:layout_marginBottom="12dp" />
 
-            <ImageView
-                android:id="@+id/ivMainLogo"
-                android:layout_width="160dp"
-                android:layout_height="80dp"
-                android:src="@drawable/logo"
-                android:scaleType="fitCenter"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:contentDescription="@string/logo_description" />
+        <Button
+            android:id="@+id/btnJournal"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:text="@string/btn_journal"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/primary_green"
+            android:layout_marginBottom="12dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/welcome_title"
-                android:textColor="@color/text_color_primary"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="8dp" />
+        <Button
+            android:id="@+id/btnProfile"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:text="@string/btn_profile"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/primary_dark_green" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/welcome_subtitle"
-                android:textColor="@color/text_color_secondary"
-                android:textSize="14sp"
-                android:gravity="center"
-                android:layout_marginBottom="32dp" />
-
-            <Button
-                android:id="@+id/btnWorkout"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:text="@string/btn_workouts"
-                android:textSize="16sp"
-                android:textColor="@color/white"
-                android:backgroundTint="@color/primary_green"
-                android:layout_marginBottom="16dp" />
-
-            <Button
-                android:id="@+id/btnJournal"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:text="@string/btn_journal"
-                android:textSize="16sp"
-                android:textColor="@color/white"
-                android:backgroundTint="@color/primary_green"
-                android:layout_marginBottom="16dp" />
-
-            <Button
-                android:id="@+id/btnProfile"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:text="@string/btn_profile"
-                android:textSize="16sp"
-                android:textColor="@color/white"
-                android:backgroundTint="@color/primary_dark_green"
-                android:layout_marginBottom="24dp" />
-
-        </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
 
 </LinearLayout>

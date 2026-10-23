@@ -1,0 +1,20 @@
+@startuml
+autonumber
+actor "User" as User
+participant ":System" as System
+
+User -> System : openWorkouts()
+
+System -> System: Gets workouts \nassociated with \ncurrent user
+alt Workouts Found: True
+    System --> User : list of saved workout plans
+
+    User -> System : selectWorkout()
+    System --> User : displays workout details
+else Workouts Found: False
+    System --> User : returnx error
+end
+
+
+
+@enduml

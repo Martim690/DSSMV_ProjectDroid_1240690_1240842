@@ -1,0 +1,14 @@
+@startuml
+autonumber
+actor "User" as User
+participant ":System" as System
+
+
+User -> System : clickDeleteEntry(EntryID)
+
+System -> System : Gets photo file.
+System -> System : Deletes Entry and file.
+
+System --> User : return Success
+
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+
+autonumber
+actor "User" as User
+participant ":System" as System
+
+User -> System : openProgressJournal()
+
+System --> User : Saved journal entries
+
+@enduml

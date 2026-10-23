@@ -1,0 +1,30 @@
+@startuml
+
+autonumber
+actor "User" as User
+participant ":System" as System
+
+User -> System : takePhoto()
+System -> System: Checks for camera permission.
+alt Camera Permission:True
+
+    System --> User : launches device camera interface
+
+
+        User -> System : confirmCapturedPhoto()
+        System -> System: Saves image.
+
+        System --> User : returns success
+else Camera Permission: False
+    System --> User : returns error
+end
+
+System --> User : journal Description request
+User -> System : journalDescription()
+
+System --> User : journal details request
+User -> System : journalDetails()
+
+System --> User : Full Entry
+
+@enduml
