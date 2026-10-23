@@ -6,6 +6,7 @@ public class WorkoutPlan {
     private String _id;
     private String name;
     private List<Exercise> exercises;
+    private String userEmail;
 
     public WorkoutPlan() {
     }
@@ -13,6 +14,12 @@ public class WorkoutPlan {
     public WorkoutPlan(String name, List<Exercise> exercises) {
         this.name = name;
         this.exercises = exercises;
+    }
+
+    public WorkoutPlan(String name, List<Exercise> exercises, String userEmail) {
+        this.name = name;
+        this.exercises = exercises;
+        this.userEmail = userEmail;
     }
 
     public String getId() { return _id; }
@@ -23,6 +30,9 @@ public class WorkoutPlan {
 
     public List<Exercise> getExercises() { return exercises; }
     public void setExercises(List<Exercise> exercises) { this.exercises = exercises; }
+
+    public String getUserEmail() { return userEmail; }
+    public void setUserEmail(String userEmail) { this.userEmail = userEmail; }
 
     @Override
     public String toString() {
