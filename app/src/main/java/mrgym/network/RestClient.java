@@ -1,4 +1,4 @@
-package mrgym.controllers;
+package mrgym.network;
 
 import android.os.AsyncTask;
 import java.io.BufferedReader;

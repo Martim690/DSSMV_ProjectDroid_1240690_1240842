@@ -8,8 +8,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import mrgym.R;
-import mrgym.controllers.SharedPrefsUtils;
-import mrgym.controllers.RestClient;
+import mrgym.utils.SharedPrefsUtils;
+import mrgym.network.RestClient;
 
 public class LoginActivity extends AppCompatActivity {
     private EditText etEmail, etPassword;

@@ -17,6 +17,8 @@ import java.util.List;
 import mrgym.R;
 import mrgym.models.Exercise;
 import mrgym.models.WorkoutPlan;
+import mrgym.network.RestClient;
+import mrgym.utils.SharedPrefsUtils;
 import mrgym.views.ExerciseSelectAdapter;
 
 public class CreateWorkoutActivity extends AppCompatActivity {

@@ -7,7 +7,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import mrgym.R;
-import mrgym.controllers.RestClient;
+import mrgym.network.RestClient;
 import com.google.gson.JsonObject;
 
 public class RegisterActivity extends AppCompatActivity {

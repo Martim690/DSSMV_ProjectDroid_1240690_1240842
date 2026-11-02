@@ -24,14 +24,17 @@ package "mrgym.models" {
         - int id
         - String name
         - String description
+        - String imageUrl
         + Exercise()
-        + Exercise(int id, String name, String description)
+        + Exercise(int id, String name, String description, String imageUrl)
         + getId(): int
         + setId(int id): void
         + getName(): String
         + setName(String name): void
         + getDescription(): String
         + setDescription(String description): void
+        + getImageUrl(): String
+        + setImageUrl(String imageUrl): void
         + toString(): String
     }
 
@@ -101,6 +104,29 @@ package "mrgym.views" {
         + getView(int position, View convertView, ViewGroup parent): View
     }
 
+    class WorkoutAdapter {
+        - Context context
+        - List<WorkoutPlan> workoutList
+        - OnDeleteClickListener deleteClickListener
+        + WorkoutAdapter(Context context, List<WorkoutPlan> workoutList, OnDeleteClickListener deleteClickListener)
+        + getCount(): int
+        + getItem(int position): Object
+        + getItemId(int position): long
+        + getView(int position, View convertView, ViewGroup parent): View
+    }
+
+    class ExerciseSelectAdapter {
+        - Context context
+        - List<Exercise> exerciseList
+        - List<Exercise> selectedExercises
+        + ExerciseSelectAdapter(Context context, List<Exercise> exerciseList)
+        + getCount(): int
+        + getItem(int position): Object
+        + getItemId(int position): long
+        + getView(int position, View convertView, ViewGroup parent): View
+        + getSelectedExercises(): List<Exercise>
+    }
+
     class JournalAdapter {
         - Context context
         - List<JournalEntry> entryList
@@ -117,6 +143,24 @@ package "mrgym.views" {
 package "mrgym.exceptions" {
     class InvalidCredentialsException {
         + InvalidCredentialsException(String message)
+    }
+}
+
+package "mrgym.network" {
+    class RestClient {
+        + {static} makeRequest(String urlString, String method, String jsonBody, String apiKey, VolleyCallback callback): void
+        + {static} fetchExercisesFromWger(ExercisesCallback callback): void
+    }
+}
+
+package "mrgym.utils" {
+    class SharedPrefsUtils {
+        - {static} String PREF_NAME
+        - {static} String KEY_EMAIL
+        - {static} String KEY_TOKEN
+        + {static} saveSession(Context context, String email, String token): void
+        + {static} getEmail(Context context): String
+        + {static} clearSession(Context context): void
     }
 }
 
@@ -155,6 +199,20 @@ package "mrgym.controllers" {
         - Button btnAddWorkout
         # onCreate(Bundle savedInstanceState): void
         + onSupportNavigateUp(): boolean
+        - loadWorkouts(): void
+        - deleteWorkout(String workoutId): void
+    }
+
+    class CreateWorkoutActivity {
+        - Toolbar toolbar
+        - EditText etWorkoutName
+        - Button btnCreateWorkout
+        - ListView listViewExercises
+        - ExerciseSelectAdapter adapter
+        # onCreate(Bundle savedInstanceState): void
+        + onSupportNavigateUp(): boolean
+        - loadExercises(): void
+        - saveWorkoutPlan(): void
     }
 
     class ProfileActivity {
@@ -191,24 +249,18 @@ package "mrgym.controllers" {
         - confirmDeleteEntry(int position): void
         - deleteEntry(int position): void
     }
-
-    class SharedPrefsUtils {
-        - {static} String PREF_NAME
-        - {static} String KEY_EMAIL
-        - {static} String KEY_TOKEN
-        + {static} saveSession(Context context, String email, String token): void
-        + {static} getEmail(Context context): String
-        + {static} clearSession(Context context): void
-    }
-
-    class RestClient {
-        + {static} makeRequest(String urlString, String method, String jsonBody, String apiKey, VolleyCallback callback): void
-    }
 }
 
 WorkoutPlan "1" o-- "*" Exercise : contains
-WorkoutActivity --> CustomAdapter : uses
-CustomAdapter --> Exercise : displays
+WorkoutActivity --> WorkoutAdapter : uses
+WorkoutAdapter --> WorkoutPlan : displays
+WorkoutActivity --> CreateWorkoutActivity : launches
+CreateWorkoutActivity --> ExerciseSelectAdapter : uses
+ExerciseSelectAdapter --> Exercise : selects
+CreateWorkoutActivity ..> RestClient : invokes
+CreateWorkoutActivity ..> SharedPrefsUtils : reads
+WorkoutActivity ..> RestClient : invokes
+WorkoutActivity ..> SharedPrefsUtils : reads
 MainActivity --> JournalActivity : launches
 MainActivity --> WorkoutActivity : launches
 MainActivity --> ProfileActivity : launches
