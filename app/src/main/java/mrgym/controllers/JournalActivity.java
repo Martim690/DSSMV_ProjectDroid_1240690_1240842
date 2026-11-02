@@ -38,6 +38,8 @@ import java.util.Comparator;
 import java.util.List;
 import mrgym.R;
 import mrgym.models.JournalEntry;
+import mrgym.network.RestClient;
+import mrgym.utils.SharedPrefsUtils;
 import mrgym.views.JournalAdapter;
 
 public class JournalActivity extends AppCompatActivity {
@@ -46,6 +48,8 @@ public class JournalActivity extends AppCompatActivity {
     private static final int REQUEST_PICK_GALLERY = 2;
     private static final int CAMERA_PERMISSION_REQUEST = 100;
     private static final int PAGE_SIZE = 6;
+    private static final String API_KEY = "a9a7646274509cf090183d26fba41bb423130";
+    private static final String JOURNAL_URL = "https://mrgym-dbdf.restdb.io/rest/journalentries";
 
     private Toolbar toolbar;
     private Button btnTakePhoto, btnPickGallery;
@@ -240,7 +244,12 @@ public class JournalActivity extends AppCompatActivity {
 
     private void saveJournalEntry(Bitmap bitmap, double weight, double height) {
         try {
-            File dir = new File(getFilesDir(), "journal");
+            String currentEmail = SharedPrefsUtils.getEmail(this);
+            String folderName = "journal";
+            if (currentEmail != null && !currentEmail.isEmpty()) {
+                folderName = "journal_" + currentEmail.replaceAll("[^a-zA-Z0-9]", "_");
+            }
+            File dir = new File(getFilesDir(), folderName);
             if (!dir.exists()) {
                 dir.mkdirs();
             }
@@ -254,30 +263,68 @@ public class JournalActivity extends AppCompatActivity {
             fos.close();
 
             String id = String.valueOf(timestamp);
-            JournalEntry newEntry = new JournalEntry(id, photoFile.getAbsolutePath(), timestamp, weight, height);
+            final JournalEntry newEntry = new JournalEntry(id, photoFile.getAbsolutePath(), timestamp, weight, height, currentEmail);
 
             allEntries.add(0, newEntry);
             displayedEntries.add(0, newEntry);
-            persistEntries();
+            persistAllEntries();
 
             adapter.notifyDataSetChanged();
             updateEmptyState();
             gridViewJournal.smoothScrollToPosition(0);
             Toast.makeText(this, getString(R.string.msg_entry_saved), Toast.LENGTH_SHORT).show();
+
+            String jsonBody = gson.toJson(newEntry);
+            RestClient.makeRequest(JOURNAL_URL, "POST", jsonBody, API_KEY, new RestClient.VolleyCallback() {
+                @Override
+                public void onSuccess(String result) {
+                    try {
+                        JournalEntry created = gson.fromJson(result, JournalEntry.class);
+                        if (created != null && created.getId() != null) {
+                            newEntry.setId(created.getId());
+                            persistAllEntries();
+                        }
+                    } catch (Exception ignored) {
+                    }
+                }
+
+                @Override
+                public void onError(String error) {
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void persistEntries() {
+    private void persistAllEntries() {
         try {
-            File dir = new File(getFilesDir(), "journal");
+            File dir = new File(getFilesDir(), "journal_data");
             if (!dir.exists()) {
                 dir.mkdirs();
             }
             File jsonFile = new File(dir, "entries.json");
+            List<JournalEntry> totalList = new ArrayList<>();
+            if (jsonFile.exists()) {
+                try {
+                    FileReader reader = new FileReader(jsonFile);
+                    Type type = new TypeToken<List<JournalEntry>>() {}.getType();
+                    List<JournalEntry> existing = gson.fromJson(reader, type);
+                    reader.close();
+                    if (existing != null) {
+                        String currentEmail = SharedPrefsUtils.getEmail(this);
+                        for (JournalEntry item : existing) {
+                            if (currentEmail != null && !currentEmail.equals(item.getUserEmail())) {
+                                totalList.add(item);
+                            }
+                        }
+                    }
+                } catch (Exception ignored) {
+                }
+            }
+            totalList.addAll(allEntries);
             FileWriter writer = new FileWriter(jsonFile);
-            gson.toJson(allEntries, writer);
+            gson.toJson(totalList, writer);
             writer.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -289,8 +336,14 @@ public class JournalActivity extends AppCompatActivity {
         displayedEntries.clear();
         currentPage = 0;
 
-        File dir = new File(getFilesDir(), "journal");
+        final String currentEmail = SharedPrefsUtils.getEmail(this);
+
+        File dir = new File(getFilesDir(), "journal_data");
         File jsonFile = new File(dir, "entries.json");
+        if (!jsonFile.exists()) {
+            jsonFile = new File(new File(getFilesDir(), "journal"), "entries.json");
+        }
+
         if (jsonFile.exists()) {
             try {
                 FileReader reader = new FileReader(jsonFile);
@@ -298,26 +351,14 @@ public class JournalActivity extends AppCompatActivity {
                 List<JournalEntry> loaded = gson.fromJson(reader, type);
                 reader.close();
                 if (loaded != null) {
-                    allEntries.addAll(loaded);
+                    for (JournalEntry e : loaded) {
+                        if (e.getUserEmail() == null || currentEmail == null || e.getUserEmail().equals(currentEmail)) {
+                            allEntries.add(e);
+                        }
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-            }
-        } else if (dir.exists()) {
-            File[] files = dir.listFiles();
-            if (files != null) {
-                for (File file : files) {
-                    if (file.getName().endsWith(".jpg")) {
-                        JournalEntry legacy = new JournalEntry(
-                                file.getName(),
-                                file.getAbsolutePath(),
-                                file.lastModified(),
-                                0,
-                                0
-                        );
-                        allEntries.add(legacy);
-                    }
-                }
             }
         }
 
@@ -330,6 +371,55 @@ public class JournalActivity extends AppCompatActivity {
 
         loadNextPage();
         updateEmptyState();
+
+        loadEntriesFromRestDB(currentEmail);
+    }
+
+    private void loadEntriesFromRestDB(final String currentEmail) {
+        RestClient.makeRequest(JOURNAL_URL, "GET", null, API_KEY, new RestClient.VolleyCallback() {
+            @Override
+            public void onSuccess(String result) {
+                try {
+                    JournalEntry[] remoteEntries = gson.fromJson(result, JournalEntry[].class);
+                    if (remoteEntries != null && remoteEntries.length > 0) {
+                        boolean changed = false;
+                        for (JournalEntry remote : remoteEntries) {
+                            if (remote.getUserEmail() == null || currentEmail == null || remote.getUserEmail().equals(currentEmail)) {
+                                boolean exists = false;
+                                for (JournalEntry local : allEntries) {
+                                    if (local.getId() != null && local.getId().equals(remote.getId())) {
+                                        exists = true;
+                                        break;
+                                    }
+                                }
+                                if (!exists) {
+                                    allEntries.add(remote);
+                                    changed = true;
+                                }
+                            }
+                        }
+                        if (changed) {
+                            Collections.sort(allEntries, new Comparator<JournalEntry>() {
+                                @Override
+                                public int compare(JournalEntry e1, JournalEntry e2) {
+                                    return Long.compare(e2.getTimestamp(), e1.getTimestamp());
+                                }
+                            });
+                            displayedEntries.clear();
+                            currentPage = 0;
+                            loadNextPage();
+                            updateEmptyState();
+                            persistAllEntries();
+                        }
+                    }
+                } catch (Exception ignored) {
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+            }
+        });
     }
 
     private void loadNextPage() {
@@ -392,9 +482,23 @@ public class JournalActivity extends AppCompatActivity {
             }
             allEntries.remove(entry);
             displayedEntries.remove(position);
-            persistEntries();
+            persistAllEntries();
             adapter.notifyDataSetChanged();
             updateEmptyState();
+
+            if (entry.getId() != null && !entry.getId().isEmpty()) {
+                String deleteUrl = JOURNAL_URL + "/" + entry.getId();
+                RestClient.makeRequest(deleteUrl, "DELETE", null, API_KEY, new RestClient.VolleyCallback() {
+                    @Override
+                    public void onSuccess(String result) {
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                    }
+                });
+            }
+
             Toast.makeText(this, getString(R.string.msg_entry_deleted), Toast.LENGTH_SHORT).show();
         }
     }

@@ -42,14 +42,18 @@ package "mrgym.models" {
         - String _id
         - String name
         - List<Exercise> exercises
+        - String userEmail
         + WorkoutPlan()
         + WorkoutPlan(String name, List<Exercise> exercises)
+        + WorkoutPlan(String name, List<Exercise> exercises, String userEmail)
         + getId(): String
         + setId(String _id): void
         + getName(): String
         + setName(String name): void
         + getExercises(): List<Exercise>
         + setExercises(List<Exercise> exercises): void
+        + getUserEmail(): String
+        + setUserEmail(String userEmail): void
         + toString(): String
     }
 
@@ -72,13 +76,16 @@ package "mrgym.models" {
     }
 
     class JournalEntry {
+        - String _id
         - String id
         - String photoPath
         - long timestamp
         - double weight
         - double height
+        - String userEmail
         + JournalEntry()
         + JournalEntry(String id, String photoPath, long timestamp, double weight, double height)
+        + JournalEntry(String id, String photoPath, long timestamp, double weight, double height, String userEmail)
         + getId(): String
         + setId(String id): void
         + getPhotoPath(): String
@@ -89,6 +96,8 @@ package "mrgym.models" {
         + setWeight(double weight): void
         + getHeight(): double
         + setHeight(double height): void
+        + getUserEmail(): String
+        + setUserEmail(String userEmail): void
         + toString(): String
     }
 }
@@ -242,8 +251,9 @@ package "mrgym.controllers" {
         - openGallery(): void
         - showEntryDetailsDialog(Bitmap photoBitmap): void
         - saveJournalEntry(Bitmap bitmap, double weight, double height): void
-        - persistEntries(): void
+        - persistAllEntries(): void
         - loadEntries(): void
+        - loadEntriesFromRestDB(String currentEmail): void
         - loadNextPage(): void
         - showPhotoDetailDialog(JournalEntry entry): void
         - confirmDeleteEntry(int position): void
@@ -268,6 +278,8 @@ ProfileActivity --> LoginActivity : launches
 JournalActivity --> JournalAdapter : uses
 JournalAdapter --> JournalEntry : displays
 JournalActivity ..> JournalEntry : manages
+JournalActivity ..> RestClient : invokes
+JournalActivity ..> SharedPrefsUtils : reads
 LoginActivity ..> SharedPrefsUtils : reads/writes
 ProfileActivity ..> SharedPrefsUtils : reads/clears
 LoginActivity ..> RestClient : invokes

@@ -10,6 +10,7 @@ class User {
 
 class WorkoutPlan {
     name
+    userEmail
 }
 
 class Exercise {
@@ -28,6 +29,7 @@ class JournalEntry {
     photoPath
     weight
     height
+    userEmail
 }
 
 User "1" --> "0..*" WorkoutPlan : creates >
