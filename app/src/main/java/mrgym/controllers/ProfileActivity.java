@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import mrgym.R;
+import mrgym.utils.SharedPrefsUtils;
 
 public class ProfileActivity extends AppCompatActivity {
 

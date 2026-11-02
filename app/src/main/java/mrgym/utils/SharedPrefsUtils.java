@@ -1,4 +1,4 @@
-package mrgym.controllers;
+package mrgym.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;

@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import mrgym.R;
+import mrgym.utils.SharedPrefsUtils;
 
 public class MainActivity extends AppCompatActivity {
 
