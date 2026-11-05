@@ -5,6 +5,9 @@
     <string name="hint_password">Password</string>
     <string name="hint_name">Name</string>
     <string name="hint_workout_name">Workout Name</string>
+    <string name="hint_search_exercises">Search exercises...</string>
+    <string name="dialog_title_save_workout">Save Workout Plan</string>
+    <string name="dialog_msg_workout_name">Enter a name for this workout plan:</string>
     <string name="btn_login">Login</string>
     <string name="btn_create_account">Create Account</string>
     <string name="btn_register">Register</string>

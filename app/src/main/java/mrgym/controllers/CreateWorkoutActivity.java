@@ -1,14 +1,19 @@
 package mrgym.controllers;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import com.google.gson.Gson;
@@ -27,7 +32,7 @@ public class CreateWorkoutActivity extends AppCompatActivity {
     private static final String WORKOUTS_URL = "https://mrgym-dbdf.restdb.io/rest/workoutplans";
 
     private Toolbar toolbar;
-    private EditText etWorkoutName;
+    private EditText etSearchExercise;
     private Button btnCreateWorkout;
     private TextView tvSelectedCount;
     private ProgressBar progressBarExercises;
@@ -49,7 +54,7 @@ public class CreateWorkoutActivity extends AppCompatActivity {
             getSupportActionBar().setTitle("Create Workout");
         }
 
-        etWorkoutName = findViewById(R.id.etWorkoutName);
+        etSearchExercise = findViewById(R.id.etSearchExercise);
         btnCreateWorkout = findViewById(R.id.btnCreateWorkout);
         tvSelectedCount = findViewById(R.id.tvSelectedCount);
         progressBarExercises = findViewById(R.id.progressBarExercises);
@@ -71,10 +76,28 @@ public class CreateWorkoutActivity extends AppCompatActivity {
             }
         });
 
+        etSearchExercise.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                adapter.filter(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
         btnCreateWorkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                submitWorkoutPlan();
+                List<Exercise> selectedExercises = adapter.getSelectedExercises();
+                if (selectedExercises.isEmpty()) {
+                    Toast.makeText(CreateWorkoutActivity.this, "Please select at least one exercise.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                promptWorkoutNameAndSave(selectedExercises);
             }
         });
 
@@ -94,9 +117,7 @@ public class CreateWorkoutActivity extends AppCompatActivity {
             @Override
             public void onSuccess(List<Exercise> exercises) {
                 progressBarExercises.setVisibility(View.GONE);
-                exerciseList.clear();
-                exerciseList.addAll(exercises);
-                adapter.notifyDataSetChanged();
+                adapter.updateData(exercises);
             }
 
             @Override
@@ -107,19 +128,37 @@ public class CreateWorkoutActivity extends AppCompatActivity {
         });
     }
 
-    private void submitWorkoutPlan() {
-        String name = etWorkoutName.getText().toString().trim();
-        if (name.isEmpty()) {
-            Toast.makeText(this, "Please enter a workout name.", Toast.LENGTH_SHORT).show();
-            return;
-        }
+    private void promptWorkoutNameAndSave(final List<Exercise> selectedExercises) {
+        final EditText etNameInput = new EditText(this);
+        etNameInput.setHint(R.string.hint_workout_name);
+        etNameInput.setSingleLine(true);
 
-        List<Exercise> selectedExercises = adapter.getSelectedExercises();
-        if (selectedExercises.isEmpty()) {
-            Toast.makeText(this, "Please select at least one exercise.", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        LinearLayout container = new LinearLayout(this);
+        container.setOrientation(LinearLayout.VERTICAL);
+        int paddingPx = (int) (20 * getResources().getDisplayMetrics().density);
+        container.setPadding(paddingPx, paddingPx / 2, paddingPx, paddingPx / 2);
+        container.addView(etNameInput);
 
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.dialog_title_save_workout)
+                .setMessage(R.string.dialog_msg_workout_name)
+                .setView(container)
+                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String name = etNameInput.getText().toString().trim();
+                        if (name.isEmpty()) {
+                            Toast.makeText(CreateWorkoutActivity.this, "Please enter a workout name.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        saveWorkoutPlan(name, selectedExercises);
+                    }
+                })
+                .setNegativeButton(R.string.btn_cancel, null)
+                .show();
+    }
+
+    private void saveWorkoutPlan(String name, List<Exercise> selectedExercises) {
         btnCreateWorkout.setEnabled(false);
         Toast.makeText(this, "Saving workout plan...", Toast.LENGTH_SHORT).show();
 

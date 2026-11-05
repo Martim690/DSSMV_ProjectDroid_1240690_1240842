@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Set;
+import java.util.HashSet;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import mrgym.models.Exercise;
@@ -36,6 +40,9 @@ public class RestClient {
                     conn.setRequestMethod(method);
                     conn.setRequestProperty("Content-Type", "application/json");
                     conn.setRequestProperty("Accept", "application/json");
+                    conn.setRequestProperty("User-Agent", "Mozilla/5.0 (MrGym Android App)");
+                    conn.setConnectTimeout(15000);
+                    conn.setReadTimeout(20000);
                     
                     if (apiKey != null && !apiKey.isEmpty()) {
                         conn.setRequestProperty("x-apikey", apiKey);
@@ -86,7 +93,7 @@ public class RestClient {
     }
 
     public static void fetchExercisesFromWger(final ExercisesCallback callback) {
-        String imgUrl = "https://wger.de/api/v2/exerciseimage/?limit=100";
+        String imgUrl = "https://wger.de/api/v2/exerciseimage/?limit=400";
         makeRequest(imgUrl, "GET", null, null, new VolleyCallback() {
             @Override
             public void onSuccess(String imgResult) {
@@ -115,7 +122,7 @@ public class RestClient {
     }
 
     private static void loadTranslations(final Map<Integer, String> imageMap, final ExercisesCallback callback) {
-        String url = "https://wger.de/api/v2/exercise-translation/?language=2&limit=40";
+        String url = "https://wger.de/api/v2/exercise-translation/?language=2&limit=1000";
         makeRequest(url, "GET", null, null, new VolleyCallback() {
             @Override
             public void onSuccess(String result) {
@@ -123,15 +130,28 @@ public class RestClient {
                 try {
                     JSONObject root = new JSONObject(result);
                     JSONArray resultsArray = root.getJSONArray("results");
+                    Set<Integer> seenIds = new HashSet<>();
                     for (int i = 0; i < resultsArray.length(); i++) {
                         JSONObject item = resultsArray.getJSONObject(i);
                         int id = item.getInt("exercise");
                         String name = item.getString("name");
+                        if (name == null || name.trim().isEmpty() || seenIds.contains(id)) {
+                            continue;
+                        }
+                        seenIds.add(id);
                         String rawDesc = item.optString("description_source", item.optString("description", ""));
                         String description = android.text.Html.fromHtml(rawDesc).toString().trim();
                         String imageUrl = imageMap.get(id);
                         exercises.add(new Exercise(id, name, description, imageUrl));
                     }
+                    Collections.sort(exercises, new Comparator<Exercise>() {
+                        @Override
+                        public int compare(Exercise e1, Exercise e2) {
+                            if (e1.getName() == null) return -1;
+                            if (e2.getName() == null) return 1;
+                            return e1.getName().compareToIgnoreCase(e2.getName());
+                        }
+                    });
                     callback.onSuccess(exercises);
                 } catch (Exception e) {
                     callback.onError("Failed to parse exercises: " + e.getMessage());

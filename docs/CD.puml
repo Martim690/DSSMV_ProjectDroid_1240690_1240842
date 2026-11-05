@@ -25,8 +25,14 @@ package "mrgym.models" {
         - String name
         - String description
         - String imageUrl
+        - int sets
+        - int reps
+        - double weight
         + Exercise()
+        + Exercise(int id, String name, String description)
         + Exercise(int id, String name, String description, String imageUrl)
+        + Exercise(int id, String name, String description, String imageUrl, int sets, int reps)
+        + Exercise(int id, String name, String description, String imageUrl, int sets, int reps, double weight)
         + getId(): int
         + setId(int id): void
         + getName(): String
@@ -35,6 +41,12 @@ package "mrgym.models" {
         + setDescription(String description): void
         + getImageUrl(): String
         + setImageUrl(String imageUrl): void
+        + getSets(): int
+        + setSets(int sets): void
+        + getReps(): int
+        + setReps(int reps): void
+        + getWeight(): double
+        + setWeight(double weight): void
         + toString(): String
     }
 
@@ -76,7 +88,6 @@ package "mrgym.models" {
     }
 
     class JournalEntry {
-        - String _id
         - String id
         - String photoPath
         - long timestamp
@@ -115,9 +126,8 @@ package "mrgym.views" {
 
     class WorkoutAdapter {
         - Context context
-        - List<WorkoutPlan> workoutList
-        - OnDeleteClickListener deleteClickListener
-        + WorkoutAdapter(Context context, List<WorkoutPlan> workoutList, OnDeleteClickListener deleteClickListener)
+        - List<WorkoutPlan> workoutPlanList
+        + WorkoutAdapter(Context context, List<WorkoutPlan> workoutPlanList)
         + getCount(): int
         + getItem(int position): Object
         + getItemId(int position): long
@@ -126,14 +136,29 @@ package "mrgym.views" {
 
     class ExerciseSelectAdapter {
         - Context context
+        - List<Exercise> displayedList
+        - List<Exercise> originalList
+        - Set<Integer> selectedIds
+        - OnSelectionChangedListener listener
+        + ExerciseSelectAdapter(Context context, List<Exercise> exerciseList, OnSelectionChangedListener listener)
+        + updateData(List<Exercise> list): void
+        + filter(String query): void
+        + getCount(): int
+        + getItem(int position): Object
+        + getItemId(int position): long
+        + toggleSelection(int position): void
+        + getSelectedExercises(): List<Exercise>
+        + getView(int position, View convertView, ViewGroup parent): View
+    }
+
+    class WorkoutDetailExerciseAdapter {
+        - Context context
         - List<Exercise> exerciseList
-        - List<Exercise> selectedExercises
-        + ExerciseSelectAdapter(Context context, List<Exercise> exerciseList)
+        + WorkoutDetailExerciseAdapter(Context context, List<Exercise> exerciseList)
         + getCount(): int
         + getItem(int position): Object
         + getItemId(int position): long
         + getView(int position, View convertView, ViewGroup parent): View
-        + getSelectedExercises(): List<Exercise>
     }
 
     class JournalAdapter {
@@ -171,6 +196,11 @@ package "mrgym.utils" {
         + {static} getEmail(Context context): String
         + {static} clearSession(Context context): void
     }
+
+    class ImageLoader {
+        - {static} Map<String, Bitmap> imageCache
+        + {static} loadImage(String imageUrl, ImageView imageView): void
+    }
 }
 
 package "mrgym.controllers" {
@@ -199,6 +229,8 @@ package "mrgym.controllers" {
         - Button btnWorkout
         - Button btnProfile
         # onCreate(Bundle savedInstanceState): void
+        + onCreateOptionsMenu(Menu menu): boolean
+        + onOptionsItemSelected(MenuItem item): boolean
     }
 
     class WorkoutActivity {
@@ -206,22 +238,31 @@ package "mrgym.controllers" {
         - ListView listViewWorkouts
         - TextView tvEmptyWorkouts
         - Button btnAddWorkout
+        - List<WorkoutPlan> workoutPlanList
+        - WorkoutAdapter adapter
         # onCreate(Bundle savedInstanceState): void
         + onSupportNavigateUp(): boolean
-        - loadWorkouts(): void
-        - deleteWorkout(String workoutId): void
+        - loadWorkoutsFromRestDB(): void
+        - showWorkoutDetailsDialog(WorkoutPlan plan): void
+        - confirmDeleteWorkout(WorkoutPlan plan): void
+        - deleteWorkoutFromRestDB(WorkoutPlan plan): void
+        - updateEmptyState(): void
     }
 
     class CreateWorkoutActivity {
         - Toolbar toolbar
-        - EditText etWorkoutName
+        - EditText etSearchExercise
         - Button btnCreateWorkout
-        - ListView listViewExercises
+        - TextView tvSelectedCount
+        - ProgressBar progressBarExercises
+        - ListView listViewAvailableExercises
+        - List<Exercise> exerciseList
         - ExerciseSelectAdapter adapter
         # onCreate(Bundle savedInstanceState): void
         + onSupportNavigateUp(): boolean
-        - loadExercises(): void
-        - saveWorkoutPlan(): void
+        - loadExercisesFromWger(): void
+        - promptWorkoutNameAndSave(List<Exercise> selectedExercises): void
+        - saveWorkoutPlan(String name, List<Exercise> selectedExercises): void
     }
 
     class ProfileActivity {
@@ -265,6 +306,8 @@ WorkoutPlan "1" o-- "*" Exercise : contains
 WorkoutActivity --> WorkoutAdapter : uses
 WorkoutAdapter --> WorkoutPlan : displays
 WorkoutActivity --> CreateWorkoutActivity : launches
+WorkoutActivity --> WorkoutDetailExerciseAdapter : uses
+WorkoutDetailExerciseAdapter --> Exercise : displays
 CreateWorkoutActivity --> ExerciseSelectAdapter : uses
 ExerciseSelectAdapter --> Exercise : selects
 CreateWorkoutActivity ..> RestClient : invokes
@@ -282,8 +325,12 @@ JournalActivity ..> RestClient : invokes
 JournalActivity ..> SharedPrefsUtils : reads
 LoginActivity ..> SharedPrefsUtils : reads/writes
 ProfileActivity ..> SharedPrefsUtils : reads/clears
+MainActivity ..> SharedPrefsUtils : clears
 LoginActivity ..> RestClient : invokes
 RegisterActivity ..> RestClient : invokes
 LoginActivity ..> InvalidCredentialsException : throws
+WorkoutAdapter ..> ImageLoader : uses
+ExerciseSelectAdapter ..> ImageLoader : uses
+WorkoutDetailExerciseAdapter ..> ImageLoader : uses
 
 @enduml
