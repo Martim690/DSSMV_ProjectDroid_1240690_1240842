@@ -17,6 +17,10 @@ class Exercise {
     id
     name
     description
+    imageUrl
+    sets
+    reps
+    weight
 }
 
 class WorkoutLog {

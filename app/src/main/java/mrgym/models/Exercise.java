@@ -5,6 +5,9 @@ public class Exercise {
     private String name;
     private String description;
     private String imageUrl;
+    private int sets = 3;
+    private int reps = 10;
+    private double weight = 0.0;
 
     public Exercise() {
     }
@@ -22,6 +25,25 @@ public class Exercise {
         this.imageUrl = imageUrl;
     }
 
+    public Exercise(int id, String name, String description, String imageUrl, int sets, int reps) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.sets = sets;
+        this.reps = reps;
+    }
+
+    public Exercise(int id, String name, String description, String imageUrl, int sets, int reps, double weight) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.sets = sets;
+        this.reps = reps;
+        this.weight = weight;
+    }
+
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
@@ -34,8 +56,17 @@ public class Exercise {
     public String getImageUrl() { return imageUrl; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 
+    public int getSets() { return sets; }
+    public void setSets(int sets) { this.sets = sets; }
+
+    public int getReps() { return reps; }
+    public void setReps(int reps) { this.reps = reps; }
+
+    public double getWeight() { return weight; }
+    public void setWeight(double weight) { this.weight = weight; }
+
     @Override
     public String toString() {
-        return "Exercise{id=" + id + ", name='" + name + "'}";
+        return "Exercise{id=" + id + ", name='" + name + "', sets=" + sets + ", reps=" + reps + ", weight=" + weight + "}";
     }
 }

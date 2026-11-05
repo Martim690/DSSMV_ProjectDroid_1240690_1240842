@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <!-- Large photo spanning full width -->
+    <ImageView
+        android:id="@+id/ivDetailExercisePhoto"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:scaleType="centerCrop"
+        android:background="#EFEFEF"
+        android:contentDescription="Exercise Photo"
+        android:layout_marginBottom="10dp" />
+
+    <!-- Name -->
+    <TextView
+        android:id="@+id/tvDetailExerciseName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/primary_dark_green"
+        android:layout_marginBottom="4dp" />
+
+    <!-- Sets / Reps / Weight target -->
+    <TextView
+        android:id="@+id/tvDetailExerciseSetsReps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:textColor="@color/primary_green"
+        android:layout_marginBottom="6dp" />
+
+    <!-- Full description — no maxLines limit -->
+    <TextView
+        android:id="@+id/tvDetailExerciseDesc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="13sp"
+        android:textColor="@color/text_color_secondary"
+        android:lineSpacingExtra="2dp"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#EEEEEE" />
+
+</LinearLayout>

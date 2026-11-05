@@ -3,9 +3,12 @@ package mrgym.controllers;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +22,7 @@ import mrgym.R;
 import mrgym.models.Exercise;
 import mrgym.models.WorkoutPlan;
 import mrgym.network.RestClient;
+import mrgym.utils.ImageLoader;
 import mrgym.utils.SharedPrefsUtils;
 import mrgym.views.WorkoutAdapter;
 
@@ -119,33 +123,80 @@ public class WorkoutActivity extends AppCompatActivity {
     }
 
     private void showWorkoutDetailsDialog(final WorkoutPlan plan) {
-        StringBuilder sb = new StringBuilder();
-        List<Exercise> exercises = plan.getExercises();
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_workout_details, null);
+        TextView tvTitle = dialogView.findViewById(R.id.tvDialogWorkoutName);
+        TextView tvSubtitle = dialogView.findViewById(R.id.tvDialogWorkoutSubtitle);
+        LinearLayout llExerciseContainer = dialogView.findViewById(R.id.llExerciseContainer);
+        Button btnDelete = dialogView.findViewById(R.id.btnDialogDeleteWorkout);
+        View btnClose = dialogView.findViewById(R.id.btnDialogClose);
 
-        if (exercises != null && !exercises.isEmpty()) {
-            for (int i = 0; i < exercises.size(); i++) {
-                Exercise e = exercises.get(i);
-                sb.append(i + 1).append(". ").append(e.getName());
-                if (e.getDescription() != null && !e.getDescription().trim().isEmpty()) {
-                    sb.append("\n   ").append(e.getDescription().trim());
+        tvTitle.setText(plan.getName());
+
+        List<Exercise> exercises = plan.getExercises();
+        int count = exercises != null ? exercises.size() : 0;
+        tvSubtitle.setText(count + (count == 1 ? " exercise" : " exercises"));
+
+        // Inflate each exercise card directly into the LinearLayout (avoids ListView-in-ScrollView issue)
+        if (exercises != null) {
+            LayoutInflater inflater = LayoutInflater.from(this);
+            for (Exercise exercise : exercises) {
+                View card = inflater.inflate(R.layout.list_item_workout_detail_exercise, llExerciseContainer, false);
+
+                ImageView ivPhoto = card.findViewById(R.id.ivDetailExercisePhoto);
+                TextView tvName = card.findViewById(R.id.tvDetailExerciseName);
+                TextView tvSetsReps = card.findViewById(R.id.tvDetailExerciseSetsReps);
+                TextView tvDesc = card.findViewById(R.id.tvDetailExerciseDesc);
+
+                tvName.setText(exercise.getName());
+
+                int sets = exercise.getSets() > 0 ? exercise.getSets() : 3;
+                int reps = exercise.getReps() > 0 ? exercise.getReps() : 10;
+                double weight = exercise.getWeight();
+                StringBuilder sb = new StringBuilder();
+                sb.append("🎯 ").append(sets).append(" sets × ").append(reps).append(" reps");
+                if (weight > 0) {
+                    if (weight == Math.floor(weight)) {
+                        sb.append(" • ").append((int) weight).append(" kg");
+                    } else {
+                        sb.append(" • ").append(String.format(java.util.Locale.US, "%.1f kg", weight));
+                    }
+                } else {
+                    sb.append(" • Bodyweight");
                 }
-                sb.append("\n\n");
+                tvSetsReps.setText(sb.toString());
+
+                String desc = exercise.getDescription();
+                if (desc == null || desc.trim().isEmpty()) {
+                    desc = "No description provided.";
+                }
+                tvDesc.setText(desc);
+
+                ImageLoader.loadImage(exercise.getImageUrl(), ivPhoto);
+
+                llExerciseContainer.addView(card);
             }
-        } else {
-            sb.append("No exercises assigned.");
         }
 
-        new AlertDialog.Builder(this)
-                .setTitle(plan.getName())
-                .setMessage(sb.toString().trim())
-                .setPositiveButton("Close", null)
-                .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        confirmDeleteWorkout(plan);
-                    }
-                })
-                .show();
+        final AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(dialogView)
+                .create();
+
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                confirmDeleteWorkout(plan);
+            }
+        });
+
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
     private void confirmDeleteWorkout(final WorkoutPlan plan) {

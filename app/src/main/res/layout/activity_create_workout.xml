@@ -20,14 +20,17 @@
         android:background="#F7F9F7">
 
         <EditText
-            android:id="@+id/etWorkoutName"
+            android:id="@+id/etSearchExercise"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_workout_name"
-            android:textSize="16sp"
+            android:hint="@string/hint_search_exercises"
+            android:textSize="15sp"
             android:textColor="@color/primary_dark_green"
             android:padding="12dp"
             android:background="@android:drawable/editbox_background_normal"
+            android:drawableStart="@android:drawable/ic_menu_search"
+            android:drawablePadding="8dp"
+            android:singleLine="true"
             android:layout_marginBottom="12dp" />
 
         <Button
