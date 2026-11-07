@@ -24,7 +24,7 @@ import mrgym.models.Exercise;
 import mrgym.models.WorkoutPlan;
 import mrgym.network.RestClient;
 import mrgym.utils.SharedPrefsUtils;
-import mrgym.views.ExerciseSelectAdapter;
+import mrgym.adapters.ExerciseSelectAdapter;
 
 public class CreateWorkoutActivity extends AppCompatActivity {
 

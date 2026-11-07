@@ -40,7 +40,7 @@ import mrgym.R;
 import mrgym.models.JournalEntry;
 import mrgym.network.RestClient;
 import mrgym.utils.SharedPrefsUtils;
-import mrgym.views.JournalAdapter;
+import mrgym.adapters.JournalAdapter;
 
 public class JournalActivity extends AppCompatActivity {
 
