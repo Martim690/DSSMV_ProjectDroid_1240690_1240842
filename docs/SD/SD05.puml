@@ -1,0 +1,41 @@
+@startuml
+autonumber
+actor "User" as User
+participant "WorkoutActivity" as UI
+participant "SharedPrefsUtils" as Prefs
+participant "RestClient" as Net
+database "RestDB (REST API)" as API
+participant "WorkoutAdapter" as Adapter
+
+activate User
+User -> UI : navigates to Workouts screen
+activate UI
+
+UI -> Net : makeRequest(WORKOUTS_URL, "GET", null, API_KEY, callback)
+activate Net
+
+Net -> API : GET /rest/workoutplans
+activate API
+API --> Net : 200 OK (JSON array of workout plans)
+deactivate API
+
+Net --> UI : onSuccess(result)
+deactivate Net
+
+UI -> Prefs : getEmail(context)
+activate Prefs
+Prefs --> UI : returns current user email
+deactivate Prefs
+
+UI -> UI : parses WorkoutPlan[] via Gson
+UI -> UI : filters plans matching currentEmail
+UI -> Adapter : notifyDataSetChanged()
+activate Adapter
+Adapter --> UI : list view refreshed
+deactivate Adapter
+
+UI -> UI : updateEmptyState()
+UI --> User : displays user workout list
+deactivate UI
+deactivate User
+@enduml

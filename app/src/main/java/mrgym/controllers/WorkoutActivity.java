@@ -136,7 +136,7 @@ public class WorkoutActivity extends AppCompatActivity {
         int count = exercises != null ? exercises.size() : 0;
         tvSubtitle.setText(count + (count == 1 ? " exercise" : " exercises"));
 
-        // Inflate each exercise card directly into the LinearLayout (avoids ListView-in-ScrollView issue)
+
         if (exercises != null) {
             LayoutInflater inflater = LayoutInflater.from(this);
             for (Exercise exercise : exercises) {

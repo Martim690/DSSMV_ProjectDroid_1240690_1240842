@@ -1,0 +1,33 @@
+@startuml
+autonumber
+actor "User" as User
+participant "RegisterActivity" as UI
+participant "RestClient" as Net
+database "RestDB (REST API)" as API
+participant "LoginActivity" as Login
+
+activate User
+User -> UI : inputs name, email, password and clicks Register
+activate UI
+
+note right of UI: Validates non-empty fields\nand password length
+
+UI -> Net : makeRequest(url, "POST", jsonBody, apiKey, callback)
+activate Net
+
+Net -> API : POST /rest/users (JSON payload)
+activate API
+API --> Net : 201 Created (User document)
+deactivate API
+
+Net --> UI : onSuccess(result)
+deactivate Net
+
+UI -> UI : show Toast("Registration successful!")
+UI -> Login ** : new Intent(RegisterActivity.this, LoginActivity.class)
+UI -> UI : startActivity(intent)
+UI -> UI : finish()
+
+deactivate UI
+deactivate User
+@enduml

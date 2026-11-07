@@ -1,0 +1,52 @@
+@startuml
+autonumber
+actor "User" as User
+participant "JournalActivity" as UI
+participant "AlertDialog" as Alert
+participant "File (Storage)" as Disk
+participant "Local Storage\n(entries.json)" as Local
+participant "RestClient" as Net
+database "RestDB (REST API)" as API
+participant "JournalAdapter" as Adapter
+
+activate User
+User -> UI : clicks Delete on a journal entry
+activate UI
+
+UI -> Alert ** : create confirmation dialog
+Alert --> User : "Are you sure you want to delete this journal entry?"
+
+User -> Alert : confirms deletion (clicks Yes)
+Alert -> UI : deleteEntry(position)
+
+UI -> Disk : photoFile.delete()
+activate Disk
+Disk --> UI : photo file removed
+deactivate Disk
+
+UI -> UI : allEntries.remove(entry)
+UI -> UI : displayedEntries.remove(position)
+UI -> Local : persistAllEntries()
+
+UI -> Adapter : notifyDataSetChanged()
+activate Adapter
+Adapter --> UI : grid view updated
+deactivate Adapter
+
+opt entry has remote RestDB ID
+    UI -> Net : makeRequest(JOURNAL_URL + "/" + id, "DELETE", null, API_KEY, callback)
+    activate Net
+    Net -> API : DELETE /rest/journalentries/:id
+    activate API
+    API --> Net : 200 OK
+    deactivate API
+    Net --> UI : onSuccess(result)
+    deactivate Net
+end
+
+UI -> UI : show Toast("Journal entry deleted.")
+UI -> UI : updateEmptyState()
+
+deactivate UI
+deactivate User
+@enduml

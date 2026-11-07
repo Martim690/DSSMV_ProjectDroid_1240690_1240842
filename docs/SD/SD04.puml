@@ -1,0 +1,25 @@
+@startuml
+autonumber
+actor "User" as User
+participant "ProfileActivity" as UI
+participant "SharedPrefsUtils" as Prefs
+participant "LoginActivity" as Login
+
+activate User
+User -> UI : clicks Logout button
+activate UI
+
+UI -> Prefs : clearSession(context)
+activate Prefs
+note right of Prefs: Clears SharedPreferences\nusing editor.clear().apply()
+Prefs --> UI : session cleared
+deactivate Prefs
+
+UI -> Login ** : new Intent(ProfileActivity.this, LoginActivity.class)
+UI -> UI : intent.setFlags(FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TASK)
+UI -> UI : startActivity(intent)
+UI -> UI : finish()
+
+deactivate UI
+deactivate User
+@enduml
