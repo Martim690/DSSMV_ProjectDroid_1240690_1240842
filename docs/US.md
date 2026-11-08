@@ -18,11 +18,20 @@ This document defines all functional User Stories for the MRGym native Android a
 | **US08** | Core Screen Navigation | Explicit Intent navigation between Main, Workouts, Profile, and Journal. | **finished** |
 | **US09** | Workout Management Interface | Interface layout for workouts with empty state and Add button. | **finished** |
 | **US10** | Evolution Journal (Camera, Gallery & Metrics) | Capture body progress photos from camera or gallery, record weight and height metrics, display chronological gallery, and delete. | **finished** |
-| **US11** | Public Exercises List (Wger API) | Fetch and display public exercises from Wger REST API. | **working** |
-| **US12** | Create Workout Plan | Compose and persist workout plans with selected exercises in RestDB. | **working** |
-| **US13** | View User Workout Plans | Retrieve and display user's saved workout plans from RestDB. | **working** |
+| **US11** | Public Exercises List (Wger API) | Fetch and display public exercises from Wger REST API. | **finished** |
+| **US12** | Create Workout Plan | Compose and persist workout plans with selected exercises in RestDB. | **finished** |
+| **US13** | View User Workout Plans | Retrieve and display user's saved workout plans from RestDB. | **finished** |
 | **US14** | Edit Workout Plan | Update exercises and name of an existing workout plan in RestDB. | **working** |
-| **US15** | Delete Workout Plan | Remove an unwanted workout plan from RestDB. | **working** |
-| **US16** | Cross-Screen Data Passing | Pass exercise/workout details between activities via Intent extras. | **working** |
+| **US15** | Delete Workout Plan | Remove an unwanted workout plan from RestDB. | **finished** |
+| **US16** | Cross-Screen Data Passing | Pass exercise/workout details between activities via Intent extras. | **finished** |
 | **US17** | GPS Workout Location Tracking | Record workout geographical coordinates via device GPS sensor. | **working** |
 
+---
+
+## Architectural Artefacts
+
+* **Domain Model (DM):** [`docs/DM.puml`](DM.puml)
+* **Class Diagram (CD):** [`docs/CD.puml`](CD.puml)
+* **Use Case Diagram:** [`docs/UseCaseDiagram.puml`](UseCaseDiagram.puml)
+* **System Sequence Diagrams (SSD):** [`docs/SSD/`](SSD/) (`SSD01.puml` to `SSD15.puml`)
+* **Sequence Diagrams (SD):** [`docs/SD/`](SD/) (`SD01.puml` to `SD11.puml`)

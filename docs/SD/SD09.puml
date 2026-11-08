@@ -1,0 +1,55 @@
+@startuml
+autonumber
+actor "User" as User
+participant "JournalActivity" as UI
+participant "SharedPrefsUtils" as Prefs
+participant "Local Storage\n(entries.json)" as Local
+participant "RestClient" as Net
+database "RestDB (REST API)" as API
+participant "JournalAdapter" as Adapter
+
+activate User
+User -> UI : navigates to Journal screen
+activate UI
+
+UI -> Prefs : getEmail(this)
+activate Prefs
+Prefs --> UI : returns current user email
+deactivate Prefs
+
+UI -> Local : reads entries.json
+activate Local
+Local --> UI : returns cached journal entries
+deactivate Local
+
+UI -> UI : filters entries matching currentEmail
+UI -> UI : sorts chronologically (newest first)
+UI -> UI : loads initial batch (PAGE_SIZE = 6)
+UI -> Adapter : notifyDataSetChanged()
+activate Adapter
+Adapter --> UI : grid view updated (2-column layout)
+deactivate Adapter
+
+UI -> Net : makeRequest(JOURNAL_URL, "GET", null, API_KEY, callback)
+activate Net
+Net -> API : GET /rest/journalentries
+activate API
+API --> Net : 200 OK (JSON array)
+deactivate API
+
+Net --> UI : onSuccess(result)
+deactivate Net
+
+UI -> UI : parses and merges remote entries
+UI -> Local : persistAllEntries()
+
+opt User scrolls down
+    User -> UI : scrolls near end of grid
+    UI -> UI : onScroll listener detects threshold
+    UI -> UI : loadNextPage() (fetches next 6 entries)
+    UI -> Adapter : notifyDataSetChanged()
+end
+
+deactivate UI
+deactivate User
+@enduml

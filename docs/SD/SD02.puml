@@ -1,0 +1,47 @@
+@startuml
+autonumber
+actor "User" as User
+participant "LoginActivity" as UI
+participant "RestClient" as Net
+database "RestDB (REST API)" as API
+participant "SharedPrefsUtils" as Prefs
+participant "InvalidCredentialsException" as Ex
+participant "MainActivity" as Main
+
+activate User
+User -> UI : inputs email, password and clicks Login
+activate UI
+
+note right of UI: Validates non-empty\nemail and password
+
+UI -> Net : makeRequest(url, "GET", null, apiKey, callback)
+activate Net
+
+Net -> API : GET /rest/users?q={"email":"...","password":"..."}
+activate API
+API --> Net : 200 OK (JSON array response)
+deactivate API
+
+Net --> UI : onSuccess(result)
+deactivate Net
+
+alt user found in database (array length > 2)
+    UI -> Prefs : saveSession(context, email, token)
+    activate Prefs
+    Prefs --> UI : session saved
+    deactivate Prefs
+
+    UI -> Main ** : new Intent(LoginActivity.this, MainActivity.class)
+    UI -> UI : startActivity(intent)
+    UI -> UI : finish()
+else user not found / empty result
+    UI -> Ex ** : new InvalidCredentialsException("Invalid credentials...")
+    activate Ex
+    Ex --> UI : exception created
+    deactivate Ex
+    UI -> UI : catch exception & show error Toast
+end
+
+deactivate UI
+deactivate User
+@enduml

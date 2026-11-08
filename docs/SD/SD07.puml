@@ -1,0 +1,34 @@
+@startuml
+autonumber
+actor "User" as User
+participant "WorkoutActivity" as UI
+participant "dialog_workout_details" as Dialog
+participant "ImageLoader" as Loader
+participant "AlertDialog" as Alert
+
+activate User
+User -> UI : clicks a workout in the list
+activate UI
+
+UI -> Dialog ** : inflate(R.layout.dialog_workout_details)
+activate Dialog
+UI -> Dialog : tvTitle.setText(plan.getName())
+UI -> Dialog : tvSubtitle.setText(count + " exercises")
+
+loop for each exercise in plan.getExercises()
+    UI -> Dialog : inflate(R.layout.list_item_workout_detail_exercise)
+    UI -> Dialog : sets exercise name, sets, reps, weight
+    UI -> Loader : loadImage(exercise.getImageUrl(), ivPhoto)
+    activate Loader
+    Loader --> Dialog : loads bitmap asynchronously
+    deactivate Loader
+    UI -> Dialog : llExerciseContainer.addView(card)
+end
+
+UI -> Alert ** : create AlertDialog with dialogView
+Alert --> User : displays workout details dialog
+deactivate Dialog
+
+deactivate UI
+deactivate User
+@enduml

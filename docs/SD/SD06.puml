@@ -1,0 +1,60 @@
+@startuml
+autonumber
+actor "User" as User
+participant "CreateWorkoutActivity" as UI
+participant "RestClient" as Net
+database "Wger API" as Wger
+participant "ExerciseSelectAdapter" as Adapter
+participant "SharedPrefsUtils" as Prefs
+database "RestDB (REST API)" as API
+
+activate User
+User -> UI : opens Create Workout screen
+activate UI
+
+UI -> Net : fetchExercisesFromWger(callback)
+activate Net
+Net -> Wger : GET /api/v2/exerciseimage/
+activate Wger
+Wger --> Net : 200 OK (image mapping)
+deactivate Wger
+
+Net -> Wger : GET /api/v2/exercise-translation/
+activate Wger
+Wger --> Net : 200 OK (exercise names & descriptions)
+deactivate Wger
+
+Net --> UI : onSuccess(exerciseList)
+deactivate Net
+
+UI -> Adapter ** : new ExerciseSelectAdapter(this, exerciseList)
+UI -> UI : listViewAvailableExercises.setAdapter(adapter)
+
+User -> UI : filters and selects exercises with sets, reps, weight
+User -> UI : clicks Create Workout button
+UI -> UI : promptWorkoutNameAndSave(selectedExercises)
+UI --> User : shows prompt dialog for workout name
+
+User -> UI : inputs name and confirms Save
+UI -> Prefs : getEmail(this)
+activate Prefs
+Prefs --> UI : returns userEmail
+deactivate Prefs
+
+UI -> UI : new WorkoutPlan(name, selectedExercises, userEmail)
+UI -> Net : makeRequest(WORKOUTS_URL, "POST", jsonBody, API_KEY, callback)
+activate Net
+Net -> API : POST /rest/workoutplans (JSON body)
+activate API
+API --> Net : 201 Created
+deactivate API
+
+Net --> UI : onSuccess(result)
+deactivate Net
+
+UI -> UI : show Toast("Workout created successfully!")
+UI -> UI : finish()
+
+deactivate UI
+deactivate User
+@enduml

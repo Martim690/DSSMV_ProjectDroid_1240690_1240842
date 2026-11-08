@@ -1,0 +1,41 @@
+@startuml
+autonumber
+actor "User" as User
+participant "WorkoutActivity" as UI
+participant "AlertDialog" as Alert
+participant "RestClient" as Net
+database "RestDB (REST API)" as API
+participant "WorkoutAdapter" as Adapter
+
+activate User
+User -> UI : clicks Delete in workout details
+activate UI
+
+UI -> Alert ** : create confirmation dialog
+Alert --> User : "Are you sure you want to delete...?"
+
+User -> Alert : confirms deletion
+Alert -> UI : confirmDeleteWorkout(plan)
+
+UI -> Net : makeRequest(WORKOUTS_URL + "/" + id, "DELETE", null, API_KEY, callback)
+activate Net
+Net -> API : DELETE /rest/workoutplans/:id
+activate API
+API --> Net : 200 OK (document removed)
+deactivate API
+
+Net --> UI : onSuccess(result)
+deactivate Net
+
+UI -> UI : workoutPlanList.remove(plan)
+UI -> Adapter : notifyDataSetChanged()
+activate Adapter
+Adapter --> UI : list view refreshed
+deactivate Adapter
+
+UI -> UI : show Toast("Workout deleted.")
+UI -> UI : updateEmptyState()
+
+deactivate UI
+deactivate User
+@enduml

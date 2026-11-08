@@ -1,0 +1,25 @@
+@startuml
+autonumber
+actor "User" as User
+participant "ProfileActivity" as UI
+participant "SharedPrefsUtils" as Prefs
+
+activate User
+User -> UI : navigates to Profile
+activate UI
+
+UI -> Prefs : getEmail(context)
+activate Prefs
+Prefs --> UI : returns saved user email
+deactivate Prefs
+
+alt email != null
+    UI -> UI : tvUserEmail.setText(email)
+else guest / no session
+    UI -> UI : tvUserEmail.setText("guest@mrgym.com")
+end
+
+UI --> User : displays user profile screen
+deactivate UI
+deactivate User
+@enduml

@@ -1,0 +1,72 @@
+@startuml
+autonumber
+actor "User" as User
+participant "JournalActivity" as UI
+participant "Android OS\n(Camera / Gallery)" as OS
+participant "dialog_journal_entry" as Dialog
+participant "FileOutputStream\n(Private Storage)" as Storage
+participant "SharedPrefsUtils" as Prefs
+participant "Local Storage\n(entries.json)" as Local
+participant "RestClient" as Net
+database "RestDB (REST API)" as API
+participant "JournalAdapter" as Adapter
+
+activate User
+alt Take Photo via Camera
+    User -> UI : clicks Take Photo button
+    activate UI
+    UI -> OS : startActivityForResult(ACTION_IMAGE_CAPTURE)
+    activate OS
+    OS --> UI : onActivityResult(RESULT_OK, data with Bitmap)
+    deactivate OS
+else Choose from Gallery
+    User -> UI : clicks Gallery button
+    UI -> OS : startActivityForResult(ACTION_PICK)
+    activate OS
+    OS --> UI : onActivityResult(RESULT_OK, imageUri)
+    deactivate OS
+    UI -> UI : decodeStream to Bitmap
+end
+
+UI -> Dialog ** : showEntryDetailsDialog(photoBitmap)
+activate Dialog
+Dialog --> User : displays photo preview and prompts for weight and height
+deactivate Dialog
+
+User -> Dialog : inputs weight, height and clicks Save
+activate Dialog
+Dialog -> UI : onSave(weight, height)
+deactivate Dialog
+
+UI -> Prefs : getEmail(this)
+activate Prefs
+Prefs --> UI : returns currentEmail
+deactivate Prefs
+
+UI -> Storage ** : creates File("journal_<email>/journal_<timestamp>.jpg")
+activate Storage
+UI -> Storage : bitmap.compress(JPEG, 90, fos)
+UI -> Storage : close()
+deactivate Storage
+
+UI -> UI : new JournalEntry(id, photoPath, timestamp, weight, height, currentEmail)
+UI -> Local : persistAllEntries()
+UI -> Adapter : notifyDataSetChanged()
+activate Adapter
+Adapter --> UI : gallery refreshed
+deactivate Adapter
+
+UI -> Net : makeRequest(JOURNAL_URL, "POST", jsonBody, API_KEY, callback)
+activate Net
+Net -> API : POST /rest/journalentries (JSON payload)
+activate API
+API --> Net : 201 Created (document with _id)
+deactivate API
+
+Net --> UI : onSuccess(result)
+deactivate Net
+UI -> UI : updates entry with remote _id & persistAllEntries()
+
+deactivate UI
+deactivate User
+@enduml

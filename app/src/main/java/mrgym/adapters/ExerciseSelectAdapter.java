@@ -1,4 +1,4 @@
-package mrgym.views;
+package mrgym.adapters;
 
 import android.content.Context;
 import android.text.Editable;
@@ -143,9 +143,9 @@ public class ExerciseSelectAdapter extends BaseAdapter {
 
         cbSelect.setChecked(selectedIds.contains(exercise.getId()));
 
-        // Directly wire the click on the whole row and on the checkbox.
-        // This is necessary because child Buttons/EditTexts in a ListView row
-        // intercept touch events, preventing onItemClickListener from ever firing.
+
+
+
         View.OnClickListener toggleClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -167,7 +167,7 @@ public class ExerciseSelectAdapter extends BaseAdapter {
         tvSetsValue.setText(String.valueOf(exercise.getSets()));
         tvRepsValue.setText(String.valueOf(exercise.getReps()));
 
-        // Remove old text watcher to avoid recycling collision
+
         if (etWeightValue.getTag() instanceof TextWatcher) {
             etWeightValue.removeTextChangedListener((TextWatcher) etWeightValue.getTag());
         }

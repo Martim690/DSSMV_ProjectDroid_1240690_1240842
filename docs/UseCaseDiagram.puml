@@ -1,11 +1,7 @@
 @startuml
 left to right direction
-skinparam packageStyle rectangle
-skinparam shadowing false
-skinparam actorStyle awesome
 
 actor "User" as user
-
 
 usecase "Account Management" as AM
 usecase "UC01: Create Account " as UC1
@@ -25,13 +21,6 @@ usecase "UC10: Add Entry to Journal" as UC10
 usecase "UC11: Delete Entry From Journal" as UC11
 
 
-usecase "Outdoor Activity Management" as OAM
-usecase "UC12: Start Session" as UC12
-usecase "UC13: End/Save Session" as UC13
-usecase "UC14: View Session" as UC14
-usecase "UC15: Delete Session" as UC15
-
-
 user --> AM
 UC1 ..> AM : <<extends>>
 UC2 ..> AM : <<extends>>
@@ -48,11 +37,5 @@ user --> PJM
 UC9 ..> PJM : <<extends>>
 UC10 ..> PJM : <<extends>>
 UC11 ..> PJM : <<extends>>
-
-user --> OAM
-UC12 ..> OAM : <<extends>>
-UC13 ..> OAM : <<extends>>
-UC14 ..> OAM : <<extends>>
-UC15 ..> OAM : <<extends>>
 
 @enduml

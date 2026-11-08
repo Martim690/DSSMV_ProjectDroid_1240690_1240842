@@ -113,7 +113,7 @@ package "mrgym.models" {
     }
 }
 
-package "mrgym.views" {
+package "mrgym.adapters" {
     class CustomAdapter {
         - Context context
         - List<Exercise> exerciseList
